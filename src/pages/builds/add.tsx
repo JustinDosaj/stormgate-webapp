@@ -1,8 +1,6 @@
 // pages/builds/add.tsx
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { db } from '../../lib/firebase';
-import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import { Container } from '@/components/shared/container';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import {
@@ -20,21 +18,21 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { SortableItem } from '@/components/shared/sortable-item';
-import { Cog6ToothIcon, PlusIcon } from '@heroicons/react/24/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
+import { AddBuildToFirebase } from '../api/firebase/functions';
 
 // Define the type for a BuildStep
 export interface BuildStep {
   id: string;
-  timing: string;
-  supply: string;
-  resource: {
-    amount: string;
-    type: string;
+  timing: {
+    type: string;  // Defines the type of timing (e.g., time, supply)
+    value: string; // Defines the actual value (e.g., '00:00')
   };
   action: {
     type: string;
-    value: string;
+    value: string; // This will hold the selected unit or structure
   };
+  description: string;    // New field for additional notes
   amount: number;
 }
 
@@ -42,35 +40,26 @@ export interface BuildStep {
 const initialSteps: BuildStep[] = [
   {
     id: 'step-1',
-    timing: '00:00',
-    supply: '300',
-    resource: { amount: '0', type: 'luminite' },
+    timing: {
+      type: 'time',
+      value: '00:00'
+    },
     action: { type: 'structure', value: '' },
     amount: 0,
+    description: '',
   },
-];
-
-// Temporary Data for Dropdowns
-export const structureOptions = [
-  { label: 'Central Command', icon: <Cog6ToothIcon className="h-5 w-5 inline-block mr-1" /> },
-  { label: 'Factory', icon: <Cog6ToothIcon className="h-5 w-5 inline-block mr-1" /> },
-];
-
-export const unitOptions = [
-  { label: 'Marine', icon: <Cog6ToothIcon className="h-5 w-5 inline-block mr-1" /> },
-  { label: 'Marauder', icon: <Cog6ToothIcon className="h-5 w-5 inline-block mr-1" /> },
 ];
 
 export default function AddBuild() {
 
   const [buildName, setBuildName] = useState('Test');
-  const [summary, setSummary] = useState('TEst2');
+  const [summary, setSummary] = useState('Test2');
   const [gameMode, setGameMode] = useState('1v1');
   const [faction, setFaction] = useState('Vanguard');
   const [enemyFaction, setEnemyFaction] = useState('Any');
   const [youtubeLink, setYoutubeLink] = useState('https://www.youtube.com');
   const [twitchLink, setTwitchLink] = useState('https://twitch.tv');
-  const [additionalInfo, setAdditionalInfo] = useState('info');
+  const [description, setDescription] = useState('info');
   const [steps, setSteps] = useState<BuildStep[]>(initialSteps);
   const [ loading, setLoading ] = useState(false);
   const { user } = useAuth();
@@ -87,38 +76,10 @@ export default function AddBuild() {
     }
   
     try {
-      const userDocRef = doc(db, 'users', user.uid);
-      const buildsCollectionRef = collection(db, 'builds');
-      const date = new Date();
-      // Add the build to the "builds" collection
-      const buildDocRef = await addDoc(buildsCollectionRef, {
-        buildName,
-        summary,
-        gameMode,
-        faction,
-        enemyFaction,
-        youtubeLink,
-        twitchLink,
-        additionalInfo,
-        steps,
-        owner: {
-          id: user.uid,
-          username: user.email || 'Temp Username',
-          ref: userDocRef,
-        },
-        createdAt: date, // Store the creation date
-        updatedAt: date, 
-      });
-  
-      // Reference the user's document and "my-builds" subcollection
-      const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
-  
-      // Add a reference to the build in the user's "my-builds" subcollection
-      await setDoc(doc(myBuildsCollectionRef, buildDocRef.id), {
-        buildId: buildDocRef.id,
-        ref: buildDocRef,
-        buildName, // Optional: Store additional build details if needed
-      });
+
+      const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps }
+
+      const addBuild = await AddBuildToFirebase({build, user})
   
       // Reset form
       setBuildName('');
@@ -128,7 +89,7 @@ export default function AddBuild() {
       setEnemyFaction('Any');
       setYoutubeLink('');
       setTwitchLink('');
-      setAdditionalInfo('');
+      setDescription('');
       setSteps(initialSteps);
   
       console.log('Build successfully added.');
@@ -179,11 +140,13 @@ export default function AddBuild() {
   const addStep = () => {
     const newStep: BuildStep = {
       id: `step-${steps.length + 1}`,
-      timing: '00:00',
-      supply: '0',
-      resource: { amount: '0', type: 'luminite' },
+      timing: {
+        type: 'time',
+        value: '00:00'
+      },
       action: { type: 'structure', value: '' },
       amount: 0,
+      description: '',
     };
     setSteps([...steps, newStep]);
   };
@@ -288,8 +251,8 @@ export default function AddBuild() {
                 <textarea
                   id="additionalInfo"
                   className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={additionalInfo}
-                  onChange={(e) => setAdditionalInfo(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
             </div>

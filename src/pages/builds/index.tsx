@@ -10,7 +10,7 @@ const placeholderBuilds = [
     title: 'Aggressive Zerg Rush',
     author: 'Gamer123',
     faction: 'Human Vanguard',
-    opponentFaction: 'Infernal Host',
+    enemyFaction: 'Infernal Host',
     rating: 23,
     dateCreated: '2024-07-01',
   },
@@ -20,7 +20,7 @@ const placeholderBuilds = [
     title: 'Defensive Terran Build',
     author: 'ProGamer',
     faction: 'Celestial Armada',
-    opponentFaction: 'Human Vanguard',
+    enemyFaction: 'Human Vanguard',
     rating: 17,
     dateCreated: '2024-07-02',
   },
@@ -30,7 +30,7 @@ const placeholderBuilds = [
     title: 'Protoss All-in Strategy',
     author: 'StarMaster',
     faction: 'Infernal Host',
-    opponentFaction: 'Celestial Armada',
+    enemyFaction: 'Celestial Armada',
     rating: 10,
     dateCreated: '2024-07-03',
   },
@@ -40,7 +40,7 @@ const placeholderBuilds = [
     title: 'Zerg Eco Focus',
     author: 'BuildMaster',
     faction: 'Human Vanguard',
-    opponentFaction: 'Celestial Armada',
+    enemyFaction: 'Celestial Armada',
     rating: 35,
     dateCreated: '2024-06-15',
   },
@@ -50,7 +50,7 @@ const placeholderBuilds = [
     title: 'Rush Defense',
     author: 'DefenseLord',
     faction: 'Celestial Armada',
-    opponentFaction: 'Infernal Host',
+    enemyFaction: 'Infernal Host',
     rating: 8,
     dateCreated: '2024-06-20',
   },
@@ -59,7 +59,7 @@ const placeholderBuilds = [
 export default function Builds() {
   return (
     <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 `}>
-      <BuildList builds={placeholderBuilds}/>
+      <BuildList builds={placeholderBuilds} title={"Builds"}/>
     </main>
   );
 }
