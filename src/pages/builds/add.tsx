@@ -1,10 +1,10 @@
 // pages/builds/add.tsx
 import { useState } from 'react';
-import { managementClient } from '../../lib/contentful-management';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '../../lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
 import { Container } from '@/components/shared/container';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 import {
   DndContext,
   closestCenter,
@@ -62,43 +62,60 @@ export const unitOptions = [
 ];
 
 export default function AddBuild() {
-  const [buildName, setBuildName] = useState('');
-  const [summary, setSummary] = useState('');
+
+  const [buildName, setBuildName] = useState('Test');
+  const [summary, setSummary] = useState('TEst2');
   const [gameMode, setGameMode] = useState('1v1');
   const [faction, setFaction] = useState('Vanguard');
   const [enemyFaction, setEnemyFaction] = useState('Any');
-  const [youtubeLink, setYoutubeLink] = useState('');
-  const [twitchLink, setTwitchLink] = useState('');
-  const [additionalInfo, setAdditionalInfo] = useState('');
+  const [youtubeLink, setYoutubeLink] = useState('https://www.youtube.com');
+  const [twitchLink, setTwitchLink] = useState('https://twitch.tv');
+  const [additionalInfo, setAdditionalInfo] = useState('info');
   const [steps, setSteps] = useState<BuildStep[]>(initialSteps);
-  const user = useAuth();
+  const [ loading, setLoading ] = useState(false);
+  const { user } = useAuth();
+
+  const auth = useRequireAuth();
 
   const handleSubmit = async () => {
-    if (!user) return;
-
+    setLoading(true);
+  
+    if (!user) {
+      console.error("User not authenticated.");
+      setLoading(false);
+      return;
+    }
+  
     try {
-      const space = await managementClient.getSpace('YOUR_SPACE_ID');
-      const environment = await space.getEnvironment('master');
-      const entry = await environment.createEntry('build', {
-        fields: {
-          title: { 'en-US': buildName },
-          summary: { 'en-US': summary },
-          gameMode: { 'en-US': gameMode },
-          faction: { 'en-US': faction },
-          enemyFaction: { 'en-US': enemyFaction },
-          youtubeLink: { 'en-US': youtubeLink },
-          twitchLink: { 'en-US': twitchLink },
-          additionalInfo: { 'en-US': additionalInfo },
-          steps: { 'en-US': steps },
-        },
-      });
-      await entry.publish();
-
-      await setDoc(doc(db, 'users', user.uid, 'builds', entry.sys.id), {
+      // Reference the "builds" collection
+      const buildsCollectionRef = collection(db, 'builds');
+  
+      // Add the build to the "builds" collection
+      const buildDocRef = await addDoc(buildsCollectionRef, {
         buildName,
-        contentfulEntryId: entry.sys.id,
+        summary,
+        gameMode,
+        faction,
+        enemyFaction,
+        youtubeLink,
+        twitchLink,
+        additionalInfo,
+        steps,
+        createdBy: user.uid, // Store the user ID who created the build
+        createdAt: new Date(), // Store the creation date
       });
-
+  
+      // Reference the user's document and "my-builds" subcollection
+      const userDocRef = doc(db, 'users', user.uid);
+      const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
+  
+      // Add a reference to the build in the user's "my-builds" subcollection
+      await addDoc(myBuildsCollectionRef, {
+        buildId: buildDocRef.id,
+        buildName, // Optional: Store additional build details if needed
+      });
+  
+      // Reset form
       setBuildName('');
       setSummary('');
       setGameMode('1v1');
@@ -108,10 +125,15 @@ export default function AddBuild() {
       setTwitchLink('');
       setAdditionalInfo('');
       setSteps(initialSteps);
+  
+      console.log('Build successfully added.');
     } catch (error) {
       console.error('Error adding build:', error);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   // Drag and Drop Handlers
   const sensors = useSensors(
@@ -320,7 +342,7 @@ export default function AddBuild() {
           className="mt-8 w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md"
           onClick={handleSubmit}
         >
-          Submit Build
+          {loading ? "Loading" : "Submit Build"}
         </button>
       </Container>
     </main>

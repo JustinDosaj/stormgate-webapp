@@ -59,7 +59,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
     >
       {/* Drag Handle */}
       <EllipsisVerticalIcon
-        className="h-7 w-7 text-gray-500 cursor-grab"
+        className="h-7 w-7 text-white cursor-grab"
         {...listeners} // Attach drag listeners to the icon
       />
 

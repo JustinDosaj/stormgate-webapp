@@ -4,7 +4,7 @@ import BuildList from "@/components/ui/buildlist";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const placeholderBuilds = [
+export const placeholderBuilds = [
   {
     id: '1',
     slug: 'aggressive-zerg-rush',
@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
       <Hero/>
-      <BuildList builds={placeholderBuilds}/>
+      <BuildList builds={placeholderBuilds} title={"Stormgate Build Orders"}/>
     </main>
   );
 }

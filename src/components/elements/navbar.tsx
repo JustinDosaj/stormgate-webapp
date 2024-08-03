@@ -1,7 +1,7 @@
 // components/Navbar.tsx
 import { useState } from 'react';
 import Link from 'next/link';
-import { UserCircleIcon, XMarkIcon, Bars3Icon } from '@heroicons/react/24/solid';
+import { UserCircleIcon, XMarkIcon, Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '@/context/AuthContext';
 
 const navItems = [
@@ -17,7 +17,7 @@ const buildNav = [
 ];
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBuildsOpen, setIsBuildsOpen] = useState(false); // State to toggle Builds submenu in mobile
 
@@ -61,8 +61,6 @@ export default function Navbar() {
 
         {/* Desktop User Profile Section */}
         <div className="items-center hidden md:flex space-x-1">
-          <UserCircleIcon className="h-8 w-8 text-gray-300" />
-          <button className="" onClick={logout}> Logout</button>
           {user ? (
             <span>{user.email}</span>
           ) : (
@@ -73,6 +71,12 @@ export default function Navbar() {
               </Link>
             </>
           )}
+          { user && (
+            <Link href="/profile">
+              <UserCircleIcon className="h-7 w-7 text-gray-300 hover:text-gray-500" />
+            </Link>
+            )
+          }
         </div>
 
         {/* Mobile Hamburger Menu */}
