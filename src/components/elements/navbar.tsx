@@ -17,7 +17,7 @@ const buildNav = [
 ];
 
 export default function Navbar() {
-  const user = useAuth();
+  const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBuildsOpen, setIsBuildsOpen] = useState(false); // State to toggle Builds submenu in mobile
 
@@ -62,6 +62,7 @@ export default function Navbar() {
         {/* Desktop User Profile Section */}
         <div className="items-center hidden md:flex space-x-1">
           <UserCircleIcon className="h-8 w-8 text-gray-300" />
+          <button className="" onClick={logout}> Logout</button>
           {user ? (
             <span>{user.email}</span>
           ) : (
@@ -139,7 +140,9 @@ export default function Navbar() {
             <li className="flex items-center space-x-2 mt-4">
               <UserCircleIcon className="h-8 w-8 text-gray-300" />
               {user ? (
-                <span>{user.email}</span>
+                <>
+                  <span>{user.email}</span>
+                </>
               ) : (
                 <>
                   <span>Not logged in</span>

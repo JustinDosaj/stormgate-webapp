@@ -1,9 +1,10 @@
-import { GetServerSideProps } from "next";
 import { Inter } from "next/font/google";
+import { GetServerSideProps } from 'next';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
     
     const { query } = context
     const slug = query.slug as string
