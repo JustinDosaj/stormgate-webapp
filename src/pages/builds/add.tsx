@@ -87,9 +87,9 @@ export default function AddBuild() {
     }
   
     try {
-      // Reference the "builds" collection
+      const userDocRef = doc(db, 'users', user.uid);
       const buildsCollectionRef = collection(db, 'builds');
-  
+      const date = new Date();
       // Add the build to the "builds" collection
       const buildDocRef = await addDoc(buildsCollectionRef, {
         buildName,
@@ -101,17 +101,22 @@ export default function AddBuild() {
         twitchLink,
         additionalInfo,
         steps,
-        createdBy: user.uid, // Store the user ID who created the build
-        createdAt: new Date(), // Store the creation date
+        owner: {
+          id: user.uid,
+          username: user.email || 'Temp Username',
+          ref: userDocRef,
+        },
+        createdAt: date, // Store the creation date
+        updatedAt: date, 
       });
   
       // Reference the user's document and "my-builds" subcollection
-      const userDocRef = doc(db, 'users', user.uid);
       const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
   
       // Add a reference to the build in the user's "my-builds" subcollection
-      await addDoc(myBuildsCollectionRef, {
+      await setDoc(doc(myBuildsCollectionRef, buildDocRef.id), {
         buildId: buildDocRef.id,
+        ref: buildDocRef,
         buildName, // Optional: Store additional build details if needed
       });
   
