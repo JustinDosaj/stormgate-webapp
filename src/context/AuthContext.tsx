@@ -22,6 +22,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
   const router = useRouter();
+  const { redirect } = router.query;
 
   const login = async () => {
     try {
@@ -46,7 +47,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             date_created: new Date().toISOString()
           });
         } 
-          router.reload()
+          router.push(redirect ? String(redirect) : '/');
       }
 
     } catch (error) {

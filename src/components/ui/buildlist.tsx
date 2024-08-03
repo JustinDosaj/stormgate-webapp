@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 
 interface BuildListProps {
   builds: Build[];
+  title: string;
 }
 
 interface Build {
@@ -21,7 +22,7 @@ interface Build {
   dateCreated: string;
 }
 
-const BuildList: React.FC<BuildListProps> = ({ builds }) => {
+const BuildList: React.FC<BuildListProps> = ({ builds, title }) => {
 
   const router = useRouter();
 
@@ -30,7 +31,7 @@ const BuildList: React.FC<BuildListProps> = ({ builds }) => {
       <div className="container mx-auto">
         {/* Title and Create Button */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold">Stormgate Build Orders</h2>
+          <h2 className="text-3xl font-bold">{title}</h2>
           <Button buttonType="button" text="Create Build Order" onClick={() => router.push('/builds/add')}/>
         </div>
 
