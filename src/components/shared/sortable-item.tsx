@@ -1,11 +1,9 @@
-// components/shared/SortableItem.tsx
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { EllipsisVerticalIcon, Cog6ToothIcon, XMarkIcon, PencilIcon } from '@heroicons/react/24/solid';
+import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { BuildStep } from '@/pages/builds/add';
-import { unitOptions, structureOptions } from '@/pages/builds/add';
-
+import { unitOptions, structureOptions, iconOptions, actionOptions } from '@/lib/stormgate-units';
 
 interface SortableItemProps {
   id: string;
@@ -35,19 +33,21 @@ export const SortableItem: React.FC<SortableItemProps> = ({
     transition,
   };
 
-  const formatTime = (input: string): string => {
-    // Remove non-digit characters
-    const digits = input.replace(/\D/g, '');
-    
-    // Pad with zeros if necessary
-    const paddedDigits = digits.padStart(4, '0');
-    
-    // Extract minutes and seconds
-    const minutes = paddedDigits.slice(0, -2);
-    const seconds = paddedDigits.slice(-2);
-    
-    // Format as mm:ss
-    return `${minutes}:${seconds}`;
+  // Define a function to get the placeholder text based on the selected type
+  const getPlaceholder = (type: string) => {
+    switch (type) {
+      case 'time':
+        return '00:00';
+      case 'supply':
+        return '9';
+      case 'luminite':
+      case 'therium':
+        return '0-9999';
+      case 'none':
+        return '';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -63,16 +63,38 @@ export const SortableItem: React.FC<SortableItemProps> = ({
         {...listeners} // Attach drag listeners to the icon
       />
 
-        {/* Timing */}
+      {/* Icon DropDown for Timing Type */}
+      <select
+        className="p-1 bg-gray-600 text-white rounded-md flex-shrink-0"
+        value={step.timing.type} // Bind the value to the current timing type
+        onChange={(e) => {
+          handleStepChange(index, 'timing', {
+            ...step.timing,
+            type: e.target.value,
+            value: '', // Reset the value when the type changes
+          });
+        }}
+      >
+        {iconOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
 
-            <input
-                type="text"
-                className="w-16 p-1 bg-gray-600 text-white rounded-md text-center"
-                placeholder="mm"
-                value={step.timing}
-                onChange={(e) => handleStepChange(index, 'timing', e.target.value)} // Use the custom handler
-                maxLength={4} // Restrict the max length to prevent overflow
-            />
+      {/* Timing Input */}
+      <input
+        type="text"
+        className="w-16 p-1 bg-gray-600 text-white rounded-md text-center"
+        placeholder={getPlaceholder(step.timing.type)} // Dynamic placeholder
+        value={step.timing.value} // Use timing.value for the input field
+        onChange={(e) => handleStepChange(index, 'timing', {
+          ...step.timing,
+          value: e.target.value, // Update the timing value
+        })}
+        maxLength={step.timing.type === 'time' ? 5 : 4} // Adjust maxLength based on type
+        disabled={step.timing.type === 'none'} // Disable the input for 'none' type
+      />
 
       {/* Action */}
       <div className="flex items-center space-x-4 flex-grow">
@@ -100,18 +122,20 @@ export const SortableItem: React.FC<SortableItemProps> = ({
               </option>
             ))}
           </optgroup>
+          <optgroup label="Actions">
+            {actionOptions.map((option) => (
+              <option key={option.label} value={option.label}>
+                {option.label}
+              </option>
+            ))}
+          </optgroup>
         </select>
         <input
           type="text"
-          placeholder="Action Details"
+          placeholder="Description"
           className="p-1 bg-gray-600 text-white rounded-md w-full"
-          value={step.action.value}
-          onChange={(e) =>
-            handleStepChange(index, 'action', {
-              ...step.action,
-              value: e.target.value,
-            })
-          }
+          value={step.description}
+          onChange={(e) => handleStepChange(index, 'description', e.target.value)}
         />
       </div>
 

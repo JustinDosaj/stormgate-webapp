@@ -5,26 +5,16 @@ import { Button } from '../elements/button';
 import { BellIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { Container } from '../shared/container';
 import { useRouter } from 'next/router';
+import { BuildListProps, Build } from '@/lib/stormgate-units';
 
-interface BuildListProps {
-  builds: Build[];
-  title: string;
-}
-
-interface Build {
-  id: string;
-  slug: string
-  title: string;
-  author: string;
-  faction: string;
-  opponentFaction: string;
-  rating: number;
-  dateCreated: string;
-}
-
-const BuildList: React.FC<BuildListProps> = ({ builds, title }) => {
+const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, totalPages }) => {
 
   const router = useRouter();
+
+  // Function to navigate pages
+  const navigateToPage = (pageNumber: number) => {
+    router.push(`/?page=${pageNumber}`);
+  };
 
   return (
     <Container className="py-8 px-4 md:px-8 bg-gray-900 text-white w-full">
@@ -32,7 +22,7 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title }) => {
         {/* Title and Create Button */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-3xl font-bold">{title}</h2>
-          <Button buttonType="button" text="Create Build Order" onClick={() => router.push('/builds/add')}/>
+          <Button buttonType="button" text="Create Build Order" onClick={() => router.push('/builds/add')} />
         </div>
 
         {/* Filter Options */}
@@ -87,7 +77,7 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title }) => {
         {/* Build List */}
         <div className="bg-gray-800 rounded-b-md">
           {builds.map((build) => (
-            <Link href={{pathname: `/builds/${build.id}/${build.slug}`}}
+            <Link href={`/builds/${build.id}/${build.slug}`}
               key={build.id}
               className="grid grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center rounded-md hover:bg-gray-900 hover:cursor-pointer"
             >
@@ -105,7 +95,7 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title }) => {
               <div>{build.faction}</div>
 
               {/* Opponent Faction */}
-              <div>{build.opponentFaction}</div>
+              <div>{build.enemyFaction}</div>
 
               {/* Build Created */}
               <div>{build.dateCreated}</div>
@@ -116,6 +106,21 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title }) => {
                 {build.rating}
               </div>
             </Link>
+          ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-6">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => navigateToPage(index + 1)}
+              className={`mx-1 px-3 py-1 rounded-md ${
+                currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-800 text-gray-300'
+              }`}
+            >
+              {index + 1}
+            </button>
           ))}
         </div>
       </div>
