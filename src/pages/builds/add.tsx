@@ -67,6 +67,7 @@ export default function AddBuild() {
   const auth = useRequireAuth();
 
   const handleSubmit = async () => {
+    
     setLoading(true);
   
     if (!user) {
