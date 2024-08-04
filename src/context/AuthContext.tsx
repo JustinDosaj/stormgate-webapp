@@ -3,9 +3,11 @@ import { User, getAuth, onAuthStateChanged, GoogleAuthProvider } from "firebase/
 import { useRouter } from 'next/router';
 import { db } from '@/lib/firebase';
 import { getDoc, doc, setDoc } from 'firebase/firestore';
+import { CheckForDuplicateUserName } from '@/pages/api/firebase/functions';
 
 interface AuthContextType {
   user: User | null;
+  username: string | null;
   isLoading: boolean;
   auth: any;
   provider: any;
@@ -18,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const [user, setUser] = useState<User | null>(null);
+  const [username, setUsername] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true);  // Default to loading
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
@@ -41,11 +44,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         
         if(!docSnap.exists()) {
+
+          const username = await CheckForDuplicateUserName()
+
           await setDoc(userRef, {
             email: user.email,
+            username: username,
             account_status: 'user',
             date_created: new Date().toISOString()
           });
+
+          setUsername(username);
+
+        } else {
+          setUsername(docSnap.data().username)
         } 
           router.push(redirect ? String(redirect) : '/');
       }
@@ -57,7 +69,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const logout = async () => {
-
+      
+      setUsername(null);
       const signOut = (await import("firebase/auth")).signOut;
       await signOut(auth);
 
@@ -69,6 +82,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       setUser(currentUser); 
       setIsLoading(false);
+
+      if (currentUser) {
+        const userRef = doc(db, 'users', currentUser.uid);
+        const docSnap = await getDoc(userRef);
+
+        if (docSnap.exists()) {
+          setUsername(docSnap.data().username); // Set the username from Firestore
+        }
+      } else {
+        setUsername(null); // Reset username if not authenticated
+      }
+      
     });
 
     return () => unsubscribe();
@@ -76,7 +101,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, auth, provider, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, auth, provider, username, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

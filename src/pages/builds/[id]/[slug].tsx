@@ -108,9 +108,9 @@ const Build: React.FC<{ build: any; id: string; slug: string }> = ({
         {/* List Header */}
         <div className="grid grid-cols-4 gap-4 bg-gray-700 p-4 font-semibold text-gray-300 border-b border-gray-400 rounded-t-md">
           <div>Timing</div>
-          <div>Action</div>
-          <div>Amount</div>
+          <div>Unit/Structure/Action</div>
           <div>Description</div>
+          <div>Amount</div>
         </div>
 
         {/* Steps List */}
@@ -135,15 +135,16 @@ const Build: React.FC<{ build: any; id: string; slug: string }> = ({
                 )}
               </div>
 
+              {/* Description */}
+              <div className="text-sm text-gray-400">
+                {step.description || "No description provided"}
+              </div>
+
               {/* Amount */}
               <div className="text-center">
                 <span className="font-bold">{step.amount}</span>
               </div>
 
-              {/* Description */}
-              <div className="text-sm text-gray-400">
-                {step.description || "No description provided"}
-              </div>
             </div>
           ))}
         </div>

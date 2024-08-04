@@ -1,16 +1,20 @@
-import { doc, setDoc, addDoc, collection, runTransaction } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, runTransaction, where, query, getDocs, getDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db } from '@/lib/firebase';
+import { generateSlug } from '@/utils/generateSlug';
+import { generateRandomUsername } from '@/utils/generateUsernames';
 
 interface AddBuildProps {
-    build: any;
+    build?: any;
     user: User;
+    newUsername?: string;
+    username?: string | null;
 }
 
 export async function AddBuildToFirebase({build, user}: AddBuildProps) {
 
     const { buildName, enemyFaction, faction, gameMode, steps, summary, twitchLink, youtubeLink, description } = build
-    const { uid, email } = user
+    const { uid } = user
 
     const userDocRef = doc(db, 'users', uid)
     const buildsCollectionRef = collection(db, 'builds')
@@ -34,7 +38,6 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
         },
         owner: {
             id: uid,
-            username: email || 'Temp Username',
             ref: userDocRef,
         },
     }
@@ -73,6 +76,55 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
     return;
 }
 
-async function generateSlug(buildName: string) {
-    return buildName.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+export async function CheckForDuplicateUserName() {
+    
+    let username = generateRandomUsername();
+    let usernameExists = true;
+
+    // Check for username uniqueness
+    while (usernameExists) {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('username', '==', username));
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        usernameExists = false;
+      } else {
+        username = generateRandomUsername();
+      }
+    }
+
+    return username;
+}
+
+export async function UpdateUsername({user, newUsername, username}: AddBuildProps) {
+
+    if (newUsername === username) { 
+        
+        // Add Notification Here to information username has not changed
+
+        return; 
+    }
+    
+    const userDocRef = doc(db, 'users', user.uid)
+
+    await setDoc(userDocRef, {
+        username: newUsername,
+    }, {merge: true})
+
+    return;
+}
+
+export async function GetAuthor(userId: string) {
+    
+    const userDocRef = doc(db, 'users', userId)
+    const userDoc = await getDoc(userDocRef)
+
+    let author = 'Unknown User'
+
+    if (userDoc.exists()) {
+        const userData = userDoc.data()
+        author = userData.username || "Unknown User";
+    }
+
+    return author
 }

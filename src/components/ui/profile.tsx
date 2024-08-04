@@ -1,7 +1,9 @@
-import { EnvelopeIcon, PencilIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { ArrowDownTrayIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Container } from "../shared/container";
 import { Button } from "../elements/button";
 import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
+import { UpdateUsername } from "@/pages/api/firebase/functions";
 
 interface ProfileProps {
     className?: string;
@@ -9,10 +11,30 @@ interface ProfileProps {
 
 export default function ProfileComponent({className}: ProfileProps) {
 
-    const { user, logout } = useAuth();
+    const { user, logout, username, isLoading } = useAuth();
+    const [ editing, setEditing ] = useState<boolean>(false)
+    const [ newUsername, setNewUsername ] = useState<string>('')
+
+    console.log(username)
+
+    const handleUserNameChange = async () => {
+
+        if(editing && user) {
+            // Code to update username
+            await UpdateUsername({user, newUsername})
+            setEditing(!editing)
+            
+        } else {
+            setEditing(!editing)
+        }
+    }
+
+    useEffect(() => {
+        setNewUsername(username || '')
+    },[isLoading, username])
 
     return(
-    <Container className="py-8 px-4 md:px-8 bg-gray-900 text-white w-full">
+    <Container className={`py-8 px-4 md:px-8 bg-gray-900 text-white w-full ${className}`}>
         <div className="container mx-auto">
             {/* Title */}
             <div className="flex items-center justify-between mb-6">
@@ -24,9 +46,8 @@ export default function ProfileComponent({className}: ProfileProps) {
                     {/* Email Input */}
                     <input
                         type="text"
-                        value={"johndoe@gmail.com"}
+                        value={user?.email || ''}
                         disabled={true}
-                        onChange={() => console.log("Change input email")}
                         className="w-fit pl-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none"
                     />
                 </div>
@@ -35,13 +56,17 @@ export default function ProfileComponent({className}: ProfileProps) {
                     {/* Email Input */}
                     <input
                         type="text"
-                        value={"User1425"}
-                        disabled={true}
-                        onChange={() => console.log("Change username input")}
+                        value={newUsername}
+                        disabled={!editing}
+                        onChange={(e) => setNewUsername(e.target.value)}
                         className="w-fit pl-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none"
                     />
-                    <button onClick={() => console.log("Set up editing")}>
-                        <PencilIcon className="h-6 w-6 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 rounded-md bg-gray-900 p-1"/>
+                    <button onClick={handleUserNameChange}>
+                        { !editing ? 
+                            <PencilIcon className="z-50 h-6 w-6 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 rounded-md bg-gray-900 p-1"/>
+                            :
+                            <ArrowDownTrayIcon className="z-50 h-6 w-6 absolute right-2 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 rounded-md bg-green-600 p-1"/>
+                        }
                     </button>
                 </div>
                 <div className="relative">
