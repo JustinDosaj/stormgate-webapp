@@ -20,6 +20,14 @@ import {
 import { SortableItem } from '@/components/shared/sortable-item';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { AddBuildToFirebase } from '../api/firebase/functions';
+import { 
+  structureOptions2,
+  unitOptions2,
+  researchOptions,
+  advancedResearchOptions,
+  abilitiesOptions,
+  timingOptions,
+} from '@/lib/stormgate-units'; // Assuming you have the data in this path
 
 // Define the type for a BuildStep
 export interface BuildStep {
@@ -51,23 +59,21 @@ const initialSteps: BuildStep[] = [
 ];
 
 export default function AddBuild() {
-
-  const [buildName, setBuildName] = useState('Test');
-  const [summary, setSummary] = useState('Test2');
+  const [buildName, setBuildName] = useState('');
+  const [summary, setSummary] = useState('');
   const [gameMode, setGameMode] = useState('1v1');
-  const [faction, setFaction] = useState('Vanguard');
-  const [enemyFaction, setEnemyFaction] = useState('Any');
-  const [youtubeLink, setYoutubeLink] = useState('https://www.youtube.com');
-  const [twitchLink, setTwitchLink] = useState('https://twitch.tv');
-  const [description, setDescription] = useState('info');
+  const [faction, setFaction] = useState('vanguard'); // Changed to lowercase for matching
+  const [enemyFaction, setEnemyFaction] = useState('any');
+  const [youtubeLink, setYoutubeLink] = useState('');
+  const [twitchLink, setTwitchLink] = useState('');
+  const [description, setDescription] = useState('');
   const [steps, setSteps] = useState<BuildStep[]>(initialSteps);
-  const [ loading, setLoading ] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
 
   const auth = useRequireAuth();
 
   const handleSubmit = async () => {
-    
     setLoading(true);
   
     if (!user) {
@@ -77,17 +83,16 @@ export default function AddBuild() {
     }
   
     try {
+      const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps };
 
-      const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps }
-
-      const addBuild = await AddBuildToFirebase({build, user})
+      await AddBuildToFirebase({ build, user });
   
       // Reset form
       setBuildName('');
       setSummary('');
       setGameMode('1v1');
-      setFaction('Vanguard');
-      setEnemyFaction('Any');
+      setFaction('vanguard');
+      setEnemyFaction('any');
       setYoutubeLink('');
       setTwitchLink('');
       setDescription('');
@@ -100,7 +105,6 @@ export default function AddBuild() {
       setLoading(false);
     }
   };
-  
 
   // Drag and Drop Handlers
   const sensors = useSensors(
@@ -157,6 +161,50 @@ export default function AddBuild() {
     setSteps(newSteps);
   };
 
+  // Function to get the dropdown options based on faction
+  const getDropdownOptions = (faction: string) => {
+    switch (faction.toLowerCase()) {
+      case 'vanguard':
+        return {
+          structures: structureOptions2.vanguard,
+          units: unitOptions2.vanguard,
+          research: researchOptions.vanguard,
+          advancedResearch: advancedResearchOptions.vanguard,
+          abilities: abilitiesOptions.vanguard,
+          timing: timingOptions.vanguard,
+        };
+      case 'celestial':
+        return {
+          structures: structureOptions2.celestials,
+          units: unitOptions2.celestials,
+          research: researchOptions.celestials,
+          advancedResearch: advancedResearchOptions.celestials,
+          abilities: abilitiesOptions.celestials,
+          timing: timingOptions.celestials,
+        };
+      case 'infernal':
+        return {
+          structures: structureOptions2.infernals,
+          units: unitOptions2.infernals,
+          research: researchOptions.infernals,
+          advancedResearch: advancedResearchOptions.infernals,
+          abilities: abilitiesOptions.infernals,
+          timing: timingOptions.infernals,
+        };
+      default:
+        return {
+          structures: [],
+          units: [],
+          research: [],
+          advancedResearch: [],
+          abilities: [],
+          timing: [],
+        };
+    }
+  };
+
+  const { structures, units, research, advancedResearch, abilities, timing } = getDropdownOptions(faction);
+
   return (
     <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
       <Container className="w-full max-w-4xl">
@@ -206,11 +254,11 @@ export default function AddBuild() {
                   id="faction"
                   className="w-full p-2 bg-gray-700 text-white rounded-md"
                   value={faction}
-                  onChange={(e) => setFaction(e.target.value)}
+                  onChange={(e) => setFaction(e.target.value.toLowerCase())}
                 >
-                  <option>Vanguard</option>
-                  <option>Infernal</option>
-                  <option>Celestial</option>
+                  <option value="vanguard">Vanguard</option>
+                  <option value="infernal">Infernal</option>
+                  <option value="celestial">Celestial</option>
                 </select>
               </div>
               <div>
@@ -219,12 +267,12 @@ export default function AddBuild() {
                   id="enemyFaction"
                   className="w-full p-2 bg-gray-700 text-white rounded-md"
                   value={enemyFaction}
-                  onChange={(e) => setEnemyFaction(e.target.value)}
+                  onChange={(e) => setEnemyFaction(e.target.value.toLowerCase())}
                 >
-                  <option>Any</option>
-                  <option>Vanguard</option>
-                  <option>Infernal</option>
-                  <option>Celestial</option>
+                  <option value="any">Any</option>
+                  <option value="vanguard">Vanguard</option>
+                  <option value="infernal">Infernal</option>
+                  <option value="celestial">Celestial</option>
                 </select>
               </div>
               <div>
@@ -289,6 +337,7 @@ export default function AddBuild() {
                       index={index}
                       handleStepChange={handleStepChange}
                       removeStep={removeStep}
+                      faction={faction} // Pass the faction to SortableItem
                     />
                   ))}
                 </div>

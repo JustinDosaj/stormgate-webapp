@@ -3,7 +3,8 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { BuildStep } from '@/pages/builds/add';
-import { unitOptions, structureOptions, iconOptions, actionOptions } from '@/lib/stormgate-units';
+import { actionOptions } from '@/lib/stormgate-units';
+import { getDropdownOptions } from '@/utils/getDropDownOptions';
 
 interface SortableItemProps {
   id: string;
@@ -11,6 +12,7 @@ interface SortableItemProps {
   index: number;
   handleStepChange: <K extends keyof BuildStep>(index: number, field: K, value: BuildStep[K]) => void;
   removeStep: (index: number) => void;
+  faction: string; // Add faction prop to choose the right options
 }
 
 export const SortableItem: React.FC<SortableItemProps> = ({
@@ -19,6 +21,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
   index,
   handleStepChange,
   removeStep,
+  faction,
 }) => {
   const {
     attributes,
@@ -42,6 +45,9 @@ export const SortableItem: React.FC<SortableItemProps> = ({
         return '9';
       case 'luminite':
       case 'therium':
+      case 'energy':
+      case 'power':
+      case 'animus':
         return '0-9999';
       case 'none':
         return '';
@@ -49,6 +55,10 @@ export const SortableItem: React.FC<SortableItemProps> = ({
         return '';
     }
   };
+
+
+  const { structures, units, research, advancedResearch, abilities, timing } = getDropdownOptions(faction);
+  const dropDownOptions = getDropdownOptions(faction);
 
   return (
     <div
@@ -75,7 +85,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
           });
         }}
       >
-        {iconOptions.map((option) => (
+        {timing.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -99,7 +109,8 @@ export const SortableItem: React.FC<SortableItemProps> = ({
       {/* Action */}
       <div className="flex items-center space-x-4 flex-grow">
         <select
-          className="p-1 bg-gray-600 text-white rounded-md flex-grow"
+          className="p-1 bg-gray-600 text-white rounded-md w-56" // Set fixed width for the select box
+          style={{ width: '14rem', whiteSpace: 'normal', overflowWrap: 'break-word', height: 'auto' }} // Added styles for fixed dropdown width and text wrapping
           value={step.action.value}
           onChange={(e) =>
             handleStepChange(index, 'action', {
@@ -109,22 +120,43 @@ export const SortableItem: React.FC<SortableItemProps> = ({
           }
         >
           <optgroup label="Structure">
-            {structureOptions.map((option) => (
-              <option key={option.label} value={option.label}>
+            {structures.map((option) => (
+              <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
                 {option.label}
               </option>
             ))}
           </optgroup>
           <optgroup label="Units">
-            {unitOptions.map((option) => (
-              <option key={option.label} value={option.label}>
+            {units.map((option) => (
+              <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
+                {option.label}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Research">
+            {research.map((option) => (
+              <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
+                {option.label}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Advanced Research">
+            {advancedResearch.map((option) => (
+              <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
+                {option.label}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Abilities">
+            {abilities.map((option) => (
+              <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
                 {option.label}
               </option>
             ))}
           </optgroup>
           <optgroup label="Actions">
             {actionOptions.map((option) => (
-              <option key={option.label} value={option.label}>
+              <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
                 {option.label}
               </option>
             ))}
@@ -138,6 +170,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
           onChange={(e) => handleStepChange(index, 'description', e.target.value)}
         />
       </div>
+
 
       {/* Amount */}
       <div className="flex items-center">

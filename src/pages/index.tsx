@@ -4,7 +4,7 @@ import { Hero } from "@/components/ui/hero";
 import BuildList from "@/components/ui/buildlist";
 import { GetServerSideProps } from "next";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy, limit, startAfter, startAt } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, startAt } from "firebase/firestore";
 import { Build, BuildListProps } from "@/lib/stormgate-units";
 import { GetAuthor } from "./api/firebase/functions";
 
@@ -20,7 +20,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     // Reference the builds collection and order by ID
     const buildsCollectionRef = collection(db, "builds");
-
 
     const buildsQuery = query(
       buildsCollectionRef,
