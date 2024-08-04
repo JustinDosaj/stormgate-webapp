@@ -116,7 +116,7 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, total
               key={index + 1}
               onClick={() => navigateToPage(index + 1)}
               className={`mx-1 px-3 py-1 rounded-md ${
-                currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-800 text-gray-300'
+                currentPage === index + 1 ? 'bg-violet-700 text-white' : 'bg-gray-800 text-gray-300 hover:bg-violet-700'
               }`}
             >
               {index + 1}
