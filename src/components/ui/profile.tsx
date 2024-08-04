@@ -1,6 +1,6 @@
 import { ArrowDownTrayIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { Container } from "../shared/container";
-import { Button } from "../elements/button";
+import { Button } from "../shared/button";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { UpdateUsername } from "@/pages/api/firebase/functions";

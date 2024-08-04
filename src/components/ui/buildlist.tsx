@@ -1,7 +1,7 @@
 // components/BuildList.tsx
 import React from 'react';
 import Link from 'next/link';
-import { Button } from '../elements/button';
+import { Button } from '../shared/button';
 import { BellIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { Container } from '../shared/container';
 import { useRouter } from 'next/router';

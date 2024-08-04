@@ -4,10 +4,16 @@ import { Inter } from "next/font/google";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { Container } from "@/components/shared/container";
+import { Button } from "@/components/shared/button";
+import { useRouter } from "next/router";
+import { GetAuthor } from "@/pages/api/firebase/functions";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  
   const { query } = context;
   const id = query.id as string;
   const slug = query.slug as string;
@@ -25,6 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     // Fetch build data from Firestore
     const buildData = buildDoc.data();
+    const username = await GetAuthor(buildData.owner.id);
 
     // Remove or transform the non-serializable Firestore reference
     const { owner, ...rest } = buildData;
@@ -38,6 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         build: { ...rest, owner: ownerData },
         id,
         slug,
+        username,
       },
     };
   } catch (error) {
@@ -49,18 +57,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 // Define the Build component to render the fetched data
-const Build: React.FC<{ build: any; id: string; slug: string }> = ({
+const Build: React.FC<{ build: any; id: string; slug: string, username: string }> = ({
   build,
   id,
   slug,
+  username,
 }) => {
+
+  const router = useRouter();
+  const [ isOwner, setIsOwner ] = useState<boolean>(false)
+  const { user, isLoading } = useAuth();
+
+  useEffect(() => {
+    
+    if(user?.uid === build.owner.id) {
+      setIsOwner(true)
+    }
+
+  },[user, isLoading])
+
+
   return (
     <main
       className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
       <Container className="p-6 max-w-4xl mx-auto bg-gray-800 text-white rounded-lg shadow-lg">
         {/* General Build Information */}
-        <h1 className="text-3xl font-bold mb-4">{build.buildName}</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold">{build.buildName}</h1>
+          {isOwner && (
+            <Button
+              text="Edit"
+              buttonType="button"
+              onClick={() => router.push(`/builds/${id}/edit`)}
+            />
+          )}
+        </div>
         <p className="mb-4">{build.summary}</p>
         <div className="flex justify-between mb-4">
           <span>Faction: {build.faction}</span>
@@ -68,7 +100,7 @@ const Build: React.FC<{ build: any; id: string; slug: string }> = ({
         </div>
         <div className="flex justify-between mb-4">
           <span>Game Mode: {build.gameMode}</span>
-          <span>Created by: {build.owner.username}</span>
+          <span>Created by: {username}</span>
         </div>
         <div className="flex justify-between mb-4">
           <span>
