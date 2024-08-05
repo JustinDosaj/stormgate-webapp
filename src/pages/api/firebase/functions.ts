@@ -1,4 +1,4 @@
-import { doc, setDoc, addDoc, collection, runTransaction, where, query, getDocs, getDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db } from '@/lib/firebase';
 import { generateSlug } from '@/utils/generateSlug';
@@ -74,6 +74,28 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
     });
 
     return;
+}
+
+export async function UpdateBuildInFirebase({build, user}: AddBuildProps) {
+    
+    const { buildName, id } = build
+    const { slug } = build.data
+    
+    const buildDocRef = doc(db, 'builds', String(id));
+    await updateDoc(buildDocRef, build);
+
+    const userDocRef = doc(db, 'users', user.uid);
+    const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
+
+    // Add a reference to the build in the user's "my-builds" subcollection
+    await updateDoc(doc(myBuildsCollectionRef, buildDocRef.id), {
+        buildId: buildDocRef.id,
+        ref: buildDocRef,
+        buildName, // Optional: Store additional build details if needed
+        slug,
+    });
+
+    
 }
 
 export async function CheckForDuplicateUserName() {

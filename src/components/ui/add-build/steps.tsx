@@ -62,7 +62,7 @@ export default function Steps({sensors, handleDragEnd, steps, handleStepChange, 
             {/* Add Step Button */}
             <button
             onClick={addStep}
-            className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md flex items-center justify-center"
+            className="mt-4 w-full bg-violet-700 hover:bg-violet-900 text-white font-semibold py-2 px-4 rounded-md flex items-center justify-center"
             >
             <PlusIcon className="h-5 w-5 mr-2" />
             Add Step

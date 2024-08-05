@@ -71,6 +71,22 @@ export default function AddBuild() {
     if (buildName === '' || !buildName) {
       Notify('Build name is required')
     }
+
+    if (youtubeLink !== '') {
+      if(!youtubeLink.includes('youtube.com')){
+        Notify("Invalid Youtube Link");
+        setLoading(false)
+        return;
+      }
+    }
+
+    if (twitchLink !== '') {   
+      if(!twitchLink.includes('twitch.tv')){
+        setLoading(false)
+        Notify("Invalid Twitch Link");
+        return;
+      }
+    }
   
     if (!user) {
       console.error("User not authenticated.");
