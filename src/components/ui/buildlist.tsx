@@ -103,7 +103,7 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, total
               {/* Rating */}
               <div className="flex items-center">
                 <HandThumbUpIcon className="h-5 w-5 text-green-500 mr-1" />
-                {build.rating}
+                {build.likes}
               </div>
             </Link>
           ))}

@@ -1,4 +1,4 @@
-import { doc, setDoc, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc } from 'firebase/firestore';
+import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc, increment } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db } from '@/lib/firebase';
 import { generateSlug } from '@/utils/generateSlug';
@@ -9,6 +9,8 @@ interface AddBuildProps {
     user: User;
     newUsername?: string;
     username?: string | null;
+    likes?: number | 0;
+    id?: string;
 }
 
 export async function AddBuildToFirebase({build, user}: AddBuildProps) {
@@ -34,7 +36,9 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
         data: {
             slug,
             createdAt: date,
-            updatedAt: date
+            updatedAt: date,
+            likes: 0,
+            likedBy: [],
         },
         owner: {
             id: uid,
@@ -149,4 +153,20 @@ export async function GetAuthor(userId: string) {
     }
 
     return author
+}
+
+interface LikesProps {
+    id: string;
+    user: User;
+    likes: number | 0;
+}
+
+export async function UpdateLikesInFirebase({likes, id, user}: LikesProps) {
+
+    const buildDocRef = doc(db, 'builds', id);
+    
+    await updateDoc(buildDocRef, {
+        "data.likes": increment(1),
+        "data.likedBy": arrayUnion(user.uid),
+    });
 }

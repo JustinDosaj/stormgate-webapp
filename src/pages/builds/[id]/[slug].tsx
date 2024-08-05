@@ -6,9 +6,12 @@ import { doc, getDoc } from "firebase/firestore";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/shared/button";
 import { useRouter } from "next/router";
-import { GetAuthor } from "@/pages/api/firebase/functions";
+import { GetAuthor, UpdateLikesInFirebase } from "@/pages/api/firebase/functions";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { BuildViewList } from "@/components/ui/buildview/list";
+import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { Notify } from "@/components/shared/notify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,6 +70,8 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
   const router = useRouter();
   const [ isOwner, setIsOwner ] = useState<boolean>(false)
   const { user, isLoading } = useAuth();
+  const [likes, setLikes] = useState<number>(build?.data.likes || 0);
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
 
   useEffect(() => {
     
@@ -74,7 +79,34 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
       setIsOwner(true)
     }
 
-  },[user, isLoading])
+    if (build.data.likedBy && user) {
+      setHasLiked(build.data.likedBy.includes(user.uid));
+    }
+
+  },[user, isLoading, build.data.likedBy])
+
+  const handleLike = async () => {
+    
+    if (!user) {
+      ("You must be logged in to like a build!")
+      return;
+    }
+
+    if (hasLiked) {
+      Notify("You've already liked this build!")
+      return;
+    }
+
+    try {
+
+      await UpdateLikesInFirebase({likes, id, user})
+      setLikes(likes + 1);
+      setHasLiked(true);
+
+    } catch (error) {
+      console.error("Error liking the build:", error);
+    }
+  }
 
 
   return (
@@ -84,7 +116,18 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
       <Container className="p-6 max-w-4xl mx-auto bg-gray-800 text-white rounded-lg shadow-lg">
         {/* General Build Information */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">{build.buildName}</h1>
+          <div className="inline-flex items-center gap-4">
+            <h1 className="text-3xl font-bold">{build.buildName}</h1>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={handleLike}
+                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-all duration-200 ease-in-out"
+              >
+                <HandThumbUpIcon className="h-8 w-8 mr-2" />
+                {likes} Likes
+              </button>
+            </div>
+          </div>
           {isOwner && (
             <Button
               text="Edit"
@@ -146,40 +189,8 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
         </div>
 
         {/* Steps List */}
-        <div className="bg-gray-800 rounded-b-md">
-          {build.steps.map((step: any, index: number) => (
-            <div
-              key={step.id}
-              className="grid grid-cols-4 gap-4 items-center p-4 border-b border-gray-700"
-            >
-              {/* Timing */}
-              <div className="flex items-center space-x-2">
-                <span className="font-mono">{step.timing.value}</span>
-                <span className="text-xs text-gray-400">{step.timing.type}</span>
-              </div>
-
-              {/* Action */}
-              <div className="flex-grow">
-                {step.action.value ? (
-                  <span className="font-medium">{step.action.value}</span>
-                ) : (
-                  <span className="text-gray-400 italic">No action specified</span>
-                )}
-              </div>
-
-              {/* Description */}
-              <div className="text-sm text-gray-400">
-                {step.description || "No description provided"}
-              </div>
-
-              {/* Amount */}
-              <div className="text-center">
-                <span className="font-bold">{step.amount}</span>
-              </div>
-
-            </div>
-          ))}
-        </div>
+        <BuildViewList build={build}/>
+      
       </Container>
     </main>
   );

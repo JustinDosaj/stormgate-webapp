@@ -12,7 +12,7 @@ export interface Build {
     author: string;
     faction: string;
     enemyFaction: string;
-    rating: number;
+    likes: number;
     dateCreated: string;
 }
 
