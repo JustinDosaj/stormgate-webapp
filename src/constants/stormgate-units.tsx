@@ -220,21 +220,3 @@ export const abilitiesOptions = {
     { label: 'Shadowfall'},
   ],
 }
-
-export interface BuildListProps {
-  builds: Build[];
-  title: string;
-  currentPage: number;
-  totalPages: number;
-}
-
-export interface Build {
-  id: string;
-  slug: string;
-  title: string;
-  author: string;
-  faction: string;
-  enemyFaction: string;
-  rating: number;
-  dateCreated: string;
-}

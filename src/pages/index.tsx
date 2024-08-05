@@ -5,7 +5,7 @@ import BuildList from "@/components/ui/buildlist";
 import { GetServerSideProps } from "next";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy, limit, startAt } from "firebase/firestore";
-import { Build, BuildListProps } from "@/lib/stormgate-units";
+import { Build, BuildListProps } from "@/constants/interfaces";
 import { GetAuthor } from "./api/firebase/functions";
 
 // Define your font

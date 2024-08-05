@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Container } from '@/components/shared/container';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-import { GetAuthor } from '@/pages/api/firebase/functions';
-import { collection, setDoc } from 'firebase/firestore';
+import AddBuildInfo from '@/components/ui/add-build/info';
+import { collection } from 'firebase/firestore';
 import {
   DndContext,
   closestCenter,
@@ -24,31 +24,12 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { 
-  structureOptions2,
-  unitOptions2,
-  researchOptions,
-  advancedResearchOptions,
-  abilitiesOptions,
-  timingOptions,
-} from '@/lib/stormgate-units';
-import { getDropdownOptions } from '@/utils/getDropDownOptions';
 import { generateSlug } from '@/utils/generateSlug';
+import SubmitButtons from '@/components/ui/add-build/submit';
+import { Notify } from '@/components/shared/notify';
 
-// Define the type for a BuildStep
-export interface BuildStep {
-  id: string;
-  timing: {
-    type: string;  // Defines the type of timing (e.g., time, supply)
-    value: string; // Defines the actual value (e.g., '00:00')
-  };
-  action: {
-    type: string;
-    value: string; // This will hold the selected unit or structure
-  };
-  description: string;    // New field for additional notes
-  amount: number;
-}
+// Importing this buildstep may cause the adding build to break
+import { BuildStep } from '@/constants/interfaces';
 
 export default function EditBuild() {
 
@@ -110,6 +91,10 @@ export default function EditBuild() {
 
   const handleSubmit = async () => {
     setLoading(true);
+
+    if (buildName === '' || !buildName) {
+      Notify('Build name is required')
+    }
 
     if (!user) {
       console.error("User not authenticated.");
@@ -200,151 +185,31 @@ export default function EditBuild() {
     setSteps(newSteps);
   };
 
-  // Function to get the dropdown options based on faction
-  const getDropdownOptions = (faction: string) => {
-    switch (faction.toLowerCase()) {
-      case 'vanguard':
-        return {
-          structures: structureOptions2.vanguard,
-          units: unitOptions2.vanguard,
-          research: researchOptions.vanguard,
-          advancedResearch: advancedResearchOptions.vanguard,
-          abilities: abilitiesOptions.vanguard,
-          timing: timingOptions.vanguard,
-        };
-      case 'celestial':
-        return {
-          structures: structureOptions2.celestials,
-          units: unitOptions2.celestials,
-          research: researchOptions.celestials,
-          advancedResearch: advancedResearchOptions.celestials,
-          abilities: abilitiesOptions.celestials,
-          timing: timingOptions.celestials,
-        };
-      case 'infernal':
-        return {
-          structures: structureOptions2.infernals,
-          units: unitOptions2.infernals,
-          research: researchOptions.infernals,
-          advancedResearch: advancedResearchOptions.infernals,
-          abilities: abilitiesOptions.infernals,
-          timing: timingOptions.infernals,
-        };
-      default:
-        return {
-          structures: [],
-          units: [],
-          research: [],
-          advancedResearch: [],
-          abilities: [],
-          timing: [],
-        };
-    }
-  };
-
-  const { structures, units, research, advancedResearch, abilities, timing } = getDropdownOptions(faction);
-
   return (
     <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
       <Container className="w-full max-w-4xl">
         <h1 className="text-3xl font-bold mb-8 text-white">Edit Build</h1>
         <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
           {/* Left Side: Build Information */}
-          <div className="bg-gray-800 p-6 rounded-lg w-full md:w-1/3">
-            <h2 className="text-xl font-semibold mb-4">General Build Information</h2>
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="buildName" className="block font-semibold mb-2">Build Name (max 65 chars):</label>
-                <input
-                  type="text"
-                  id="buildName"
-                  maxLength={65}
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={buildName}
-                  onChange={(e) => setBuildName(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="summary" className="block font-semibold mb-2">Summary (max 165 chars):</label>
-                <input
-                  type="text"
-                  id="summary"
-                  maxLength={165}
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={summary}
-                  onChange={(e) => setSummary(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="gameMode" className="block font-semibold mb-2">Game Mode:</label>
-                <select
-                  id="gameMode"
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={gameMode}
-                  onChange={(e) => setGameMode(e.target.value)}
-                >
-                  <option>1v1</option>
-                  <option>3vE</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="faction" className="block font-semibold mb-2">Faction Selection:</label>
-                <select
-                  id="faction"
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={faction}
-                  onChange={(e) => setFaction(e.target.value.toLowerCase())}
-                >
-                  <option value="vanguard">Vanguard</option>
-                  <option value="infernal">Infernal</option>
-                  <option value="celestial">Celestial</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="enemyFaction" className="block font-semibold mb-2">Enemy Faction:</label>
-                <select
-                  id="enemyFaction"
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={enemyFaction}
-                  onChange={(e) => setEnemyFaction(e.target.value.toLowerCase())}
-                >
-                  <option value="any">Any</option>
-                  <option value="vanguard">Vanguard</option>
-                  <option value="infernal">Infernal</option>
-                  <option value="celestial">Celestial</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="youtubeLink" className="block font-semibold mb-2">YouTube Link:</label>
-                <input
-                  type="text"
-                  id="youtubeLink"
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={youtubeLink}
-                  onChange={(e) => setYoutubeLink(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="twitchLink" className="block font-semibold mb-2">Twitch Link:</label>
-                <input
-                  type="text"
-                  id="twitchLink"
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={twitchLink}
-                  onChange={(e) => setTwitchLink(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="additionalInfo" className="block font-semibold mb-2">Additional Information:</label>
-                <textarea
-                  id="additionalInfo"
-                  className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
+          
+          <AddBuildInfo
+            buildName={buildName}
+            setBuildName={setBuildName}
+            summary={summary}
+            setSummary={setSummary}
+            gameMode={gameMode}
+            setGameMode={setGameMode}
+            faction={faction}
+            setFaction={setFaction}
+            enemyFaction={enemyFaction}
+            setEnemyFaction={setEnemyFaction}
+            youtubeLink={youtubeLink}
+            setYoutubeLink={setYoutubeLink}
+            twitchLink={twitchLink}
+            setTwitchLink={setTwitchLink}
+            description={description}
+            setDescription={setDescription}
+          />
 
           {/* Right Side: Build Order Steps */}
           <div className="bg-gray-800 p-6 rounded-lg w-full md:w-3/4">
@@ -395,12 +260,9 @@ export default function EditBuild() {
         </div>
 
         {/* Submit Button */}
-        <button
-          className="mt-8 w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md"
-          onClick={handleSubmit}
-        >
-          {loading ? "Loading" : "Update Build"}
-        </button>
+        
+        <SubmitButtons handleSubmit={handleSubmit} loading={loading}/>
+
       </Container>
     </main>
   );

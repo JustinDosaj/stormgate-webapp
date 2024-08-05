@@ -7,7 +7,7 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs, doc, getDoc, query, orderBy } from "firebase/firestore";
 import ProfileComponent from "@/components/ui/profile";
 import { useAuth } from "@/context/AuthContext"; // Use the Auth Context
-import { Build } from "@/lib/stormgate-units";
+import { Build } from "@/constants/interfaces";
 import { GetAuthor } from "../api/firebase/functions";
 import { useRouter } from "next/router";
 

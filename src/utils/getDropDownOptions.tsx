@@ -1,4 +1,4 @@
-import { structureOptions2, researchOptions, advancedResearchOptions, timingOptions, abilitiesOptions, unitOptions2 } from '@/lib/stormgate-units';
+import { structureOptions2, researchOptions, advancedResearchOptions, timingOptions, abilitiesOptions, unitOptions2 } from '@/constants/stormgate-units';
 
 export const getDropdownOptions = (faction: string) => {
     switch (faction.toLowerCase()) {

@@ -5,7 +5,7 @@ import { Button } from '../shared/button';
 import { BellIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { Container } from '../shared/container';
 import { useRouter } from 'next/router';
-import { BuildListProps, Build } from '@/lib/stormgate-units';
+import { BuildListProps, Build } from '@/constants/stormgate-units';
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter';
 
 const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, totalPages }) => {
