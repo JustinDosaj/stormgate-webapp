@@ -3,7 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { BuildStep } from '@/pages/builds/add';
-import { actionOptions } from '@/lib/stormgate-units';
+import { actionOptions } from '@/constants/stormgate-units';
 import { getDropdownOptions } from '@/utils/getDropDownOptions';
 
 interface SortableItemProps {

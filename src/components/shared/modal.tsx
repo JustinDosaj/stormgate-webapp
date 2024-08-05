@@ -16,14 +16,14 @@ const statusIcons = {
   info: <BookOpenIcon className='text-violet-600 h-8 w-8' aria-hidden="true" />,
   error: <ExclamationTriangleIcon className='text-red-500 h-8 w-8' aria-hidden="true" />,
   success: <CheckCircleIcon className='text-green-500 h-8 w-8' aria-hidden="true" />,
-  warning: <ExclamationTriangleIcon className='text-yellow-500 h-8 w-8' aria-hidden="true" />,
+  warning: <ExclamationTriangleIcon className='text-yellow-600 h-8 w-8' aria-hidden="true" />,
 };
 
 const borderColor = {
     info: 'border-violet-600/50',
     error: 'border-red-500/50',
     success: 'border-green-500/50',
-    warning: 'border-yellow-500/50',
+    warning: 'border-yellow-600/50',
 }
 
 const GlobalModal: React.FC = () => {
@@ -67,10 +67,10 @@ const GlobalModal: React.FC = () => {
                                         {statusIcons[status]}
                                     </div>
                                     <div className="mt-1 text-center space-y-1">
-                                        <Dialog.Title as="h3" className="text-xl lg:text-2xl font-semibold leading-6 text-gray-900 capitalize">
+                                        <Dialog.Title as="h3" className="text-xl lg:text-2xl font-semibold leading-6 text-white capitalize">
                                         {title}
                                         </Dialog.Title>
-                                        <p className="text-sm lg:text-base text-gray-600">
+                                        <p className="text-sm lg:text-base text-gray-200">
                                             {text}
                                         </p>
     
@@ -78,7 +78,7 @@ const GlobalModal: React.FC = () => {
                                 </div>
 
                                 {/*<div className={displayAd ? `w-[260px] md:w-[336px] mx-auto` : `hidden`}>
-                                    <AdSenseDisplay adSlot="9250004753" adFormat="rectangle" widthRes="true" role={role} maxHeight="250px"/>
+                                    <AdSenseDisplay adSlot="9250004753" adFormat="rectangle" widthRes="true" maxHeight="250px"/>
                                 </div>*/}
 
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">

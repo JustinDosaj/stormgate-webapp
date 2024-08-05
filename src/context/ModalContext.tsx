@@ -8,7 +8,6 @@ interface ModalContextProps {
   title: string;
   text: string;
   buttonName: string;
-  role?: string | null;
   displayAd: boolean;
   status: ModalStatus;
   openModal: (title: string, text: string, buttonName: string, status: ModalStatus, displayAd?: boolean, role?: string | null) => void;
@@ -22,17 +21,15 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [buttonName, setButtonName] = useState('');
-  const [role, setRole] = useState<string | null>(null);
   const [displayAd, setDisplayAd] = useState(false);
   const [status, setStatus] = useState<ModalStatus>('info');
 
-  const openModal = (title: string, text: string, buttonName: string, status: ModalStatus, displayAd = false, role: string | null = null) => {
+  const openModal = ( title: string, text: string, buttonName: string, status: ModalStatus, displayAd = false ) => {
     setTitle(title);
     setText(text);
     setButtonName(buttonName);
     setStatus(status);
     setDisplayAd(displayAd);
-    setRole(role);
     setIsOpen(true);
   };
 
@@ -41,7 +38,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, title, text, buttonName, role, displayAd, status, openModal, closeModal }}>
+    <ModalContext.Provider value={{ isOpen, title, text, buttonName, displayAd, status, openModal, closeModal }}>
       {children}
     </ModalContext.Provider>
   );

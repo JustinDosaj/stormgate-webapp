@@ -89,7 +89,7 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
             <Button
               text="Edit"
               buttonType="button"
-              onClick={() => router.push(`/builds/${id}/edit`)}
+              onClick={() => router.push(`/builds/edit/${id}`)}
             />
           )}
         </div>
