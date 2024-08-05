@@ -3,6 +3,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
 import type { AppProps } from "next/app";
 import { AuthProvider } from "@/context/AuthContext";
+import GlobalModal from "@/components/shared/modal";
+import { ModalProvider } from "@/context/ModalContext";
 import Navbar from "@/components/elements/navbar";
 
 const customToastStyle = {
@@ -20,6 +22,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <div className="dark:bg-gray-900 min-h-screen">
+      <ModalProvider>
+        <GlobalModal/>
         <Navbar/>
         <Component {...pageProps} />
         <ToastContainer
@@ -33,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
           draggable={true} // Enable drag to close
           theme="dark" // Apply dark theme
         />
+      </ModalProvider>
       </div>
     </AuthProvider>
 
