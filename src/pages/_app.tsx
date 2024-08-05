@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import { AuthProvider } from "@/context/AuthContext";
 import GlobalModal from "@/components/shared/modal";
 import { ModalProvider } from "@/context/ModalContext";
+import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/elements/navbar";
 
 const customToastStyle = {
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <GlobalModal/>
         <Navbar/>
         <Component {...pageProps} />
+        <Analytics/>
         <ToastContainer
           toastStyle={customToastStyle}
           position="top-right" // Customize position if needed

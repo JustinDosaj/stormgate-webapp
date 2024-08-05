@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         author: username,
         faction: data.faction,
         enemyFaction: data.enemyFaction,
-        rating: data.rating || 0,
+        likes: data.data.likes,
         dateCreated: new Date(data.data.createdAt).toLocaleDateString(),
         dateUpdated: new Date(data.data.updatedAt).toLocaleDateString(),
       };
