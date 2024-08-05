@@ -6,8 +6,6 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import AddBuildInfo from '@/components/ui/add-build/info';
 import { collection } from 'firebase/firestore';
 import {
-  DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -15,21 +13,17 @@ import {
 } from '@dnd-kit/core';
 import {
   arrayMove,
-  SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { SortableItem } from '@/components/shared/sortable-item';
-import { PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/router';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { generateSlug } from '@/utils/generateSlug';
 import SubmitButtons from '@/components/ui/add-build/submit';
 import { Notify } from '@/components/shared/notify';
-
-// Importing this buildstep may cause the adding build to break
+import Steps from '@/components/ui/add-build/steps';
 import { BuildStep } from '@/constants/interfaces';
+import { UpdateBuildInFirebase } from '@/pages/api/firebase/functions';
 
 export default function EditBuild() {
 
@@ -94,7 +88,25 @@ export default function EditBuild() {
 
     if (buildName === '' || !buildName) {
       Notify('Build name is required')
+      setLoading(false)
     }
+
+    if (youtubeLink !== '') {
+      if(!youtubeLink.includes('youtube.com')){
+        Notify("Invalid Youtube Link");
+        setLoading(false)
+        return;
+      }
+    }
+
+    if (twitchLink !== '') {   
+      if(!twitchLink.includes('twitch.tv')){
+        setLoading(false)
+        Notify("Invalid Twitch Link");
+        return;
+      }
+    }
+
 
     if (!user) {
       console.error("User not authenticated.");
@@ -105,24 +117,11 @@ export default function EditBuild() {
     try {
 
         const slug = await generateSlug(buildName || '');
-        const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps, data: { slug, createdAt, updatedAt } };
-
-        // Update the build in Firebase
-        const buildDocRef = doc(db, 'builds', String(id));
-        await updateDoc(buildDocRef, build);
-
-        const userDocRef = doc(db, 'users', user.uid);
-        const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
-
-        // Add a reference to the build in the user's "my-builds" subcollection
-        await updateDoc(doc(myBuildsCollectionRef, buildDocRef.id), {
-            buildId: buildDocRef.id,
-            ref: buildDocRef,
-            buildName, // Optional: Store additional build details if needed
-            slug,
-        });
+        const build = { id, buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps, data: { slug, createdAt, updatedAt } };
+        const temp = await UpdateBuildInFirebase({build, user})
 
         router.push(`/builds/${id}/${slug}`); // Redirect to the updated build page
+
     } catch (error) {
       console.error('Error updating build:', error);
     } finally {
@@ -212,51 +211,15 @@ export default function EditBuild() {
           />
 
           {/* Right Side: Build Order Steps */}
-          <div className="bg-gray-800 p-6 rounded-lg w-full md:w-3/4">
-            <h2 className="text-xl font-semibold">Edit Build Order Steps</h2>
-            <p className="text-base mb-4">Edit build steps using time, resources, or supply as a tracking mechanism</p>
-            
-            {/* Column Headers */}
-            <div className="flex justify-start pl-16 mb-2 text-sm font-semibold text-gray-400">
-              <div className="text-center">Timing</div>
-              <div className="col-span-2 text-center pl-16">Unit/Building</div>
-              <div className="col-span-1 text-center pl-52">Amount</div>
-            </div>
-            
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={steps.map((step) => step.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                <div className="space-y-4">
-                  {steps.map((step, index) => (
-                    <SortableItem
-                      key={step.id}
-                      id={step.id}
-                      step={step}
-                      index={index}
-                      handleStepChange={handleStepChange}
-                      removeStep={removeStep}
-                      faction={faction} // Pass the faction to SortableItem
-                    />
-                  ))}
-                </div>
-              </SortableContext>
-            </DndContext>
-
-            {/* Add Step Button */}
-            <button
-              onClick={addStep}
-              className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md flex items-center justify-center"
-            >
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Add Step
-            </button>
-          </div>
+          <Steps 
+            sensors={sensors} 
+            steps={steps} 
+            faction={faction} 
+            handleDragEnd={handleDragEnd}
+            handleStepChange={handleStepChange}
+            removeStep={removeStep}
+            addStep={addStep}
+          />
         </div>
 
         {/* Submit Button */}

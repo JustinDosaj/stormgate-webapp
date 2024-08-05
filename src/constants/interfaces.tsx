@@ -30,3 +30,15 @@ export interface BuildStep {
     amount: number;
 }
 
+export interface SubmitBuildProps {
+  buildName: string;
+  summary: string;
+  gameMode: string;
+  faction: string;
+  enemyFaction: string;
+  youtubeLink: string;
+  twitchLink: string;
+  description: string;
+  steps: BuildStep[];
+}
+

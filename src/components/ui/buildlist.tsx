@@ -5,8 +5,7 @@ import { Button } from '../shared/button';
 import { BellIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { Container } from '../shared/container';
 import { useRouter } from 'next/router';
-import { BuildListProps, Build } from '@/constants/stormgate-units';
-import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter';
+import { BuildListProps } from '@/constants/interfaces';
 
 const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, totalPages }) => {
 
@@ -87,16 +86,16 @@ const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, total
                 {/* Icon Placeholder */}
                 <BellIcon className="h-8 w-8 text-gray-400" />
                 <div className="ml-3">
-                  <div className="font-semibold">{build.title}</div>
+                  <div className="font-semibold capitalize">{build.title}</div>
                   <div className="text-sm text-gray-400">by {build.author}</div>
                 </div>
               </div>
 
               {/* Faction */}
-              <div>{capitalizeFirstLetter(build.faction)}</div>
+              <div className="capitalize">{build.faction}</div>
 
               {/* Opponent Faction */}
-              <div>{capitalizeFirstLetter(build.enemyFaction)}</div>
+              <div className="capitalize">{build.enemyFaction}</div>
 
               {/* Build Created */}
               <div>{build.dateCreated}</div>

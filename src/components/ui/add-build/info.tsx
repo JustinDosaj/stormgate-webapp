@@ -32,11 +32,11 @@ export default function AddBuildInfo({
             <h2 className="text-xl font-semibold mb-4">General Build Information</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="buildName" className="block font-semibold mb-2">Build Name (max 65 chars):</label>
+                <label htmlFor="buildName" className="block font-semibold mb-2">Build Name (max 50 chars):</label>
                 <input
                   type="text"
                   id="buildName"
-                  maxLength={65}
+                  maxLength={40}
                   className="w-full p-2 bg-gray-700 text-white rounded-md"
                   value={buildName}
                   onChange={(e) => setBuildName(e.target.value)}
