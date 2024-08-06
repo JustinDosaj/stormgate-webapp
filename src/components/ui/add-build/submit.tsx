@@ -20,6 +20,7 @@ export default function SubmitButtons({handleSubmit, loading}: ButtonProps) {
             </button>
             <button
             className="mt-8 w-fit bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md"
+            disabled={loading}
             onClick={handleSubmit}
             >
             {loading ? "Loading" : "Submit Build"}

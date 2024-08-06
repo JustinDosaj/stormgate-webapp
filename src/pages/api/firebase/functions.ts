@@ -202,6 +202,8 @@ export async function DeleteBuildFromFirebase({userId, buildId}: DeleteBuildProp
         // Delete the reference from the user's "my-builds" subcollection
         await deleteDoc(myBuildsDocRef);
 
+        Notify("Build deleted successfully");
+
     } catch (error) {
         console.error("Error deleting build: ", error);
     }
