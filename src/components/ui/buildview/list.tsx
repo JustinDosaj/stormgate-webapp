@@ -4,7 +4,7 @@ export function BuildViewList({build}: any) {
             {build.steps.map((step: any, index: number) => (
             <div
                 key={step.id}
-                className="grid grid-cols-4 gap-4 items-center p-4 border-b border-gray-700"
+                className="grid grid-cols-3 gap-4 items-center p-4 border-b border-gray-700"
             >
                 {/* Timing */}
                 <div className="flex items-center space-x-2">
@@ -15,21 +15,21 @@ export function BuildViewList({build}: any) {
                 {/* Action */}
                 <div className="flex-grow">
                 {step.action.value ? (
-                    <span className="font-medium">{step.action.value}</span>
+                    <div className="space-x-1.5">
+                        <span>{step.action.value}</span>
+                        <span className="">{step.amount == 0 ? '' : `x${step.amount}`}</span>
+                    </div>
                 ) : (
                     <span className="text-gray-400 italic">No action specified</span>
                 )}
                 </div>
 
+
                 {/* Description */}
                 <div className="text-sm text-gray-400">
-                {step.description || "No description provided"}
+                    {step.description || "No description provided"}
                 </div>
 
-                {/* Amount */}
-                <div className="text-center">
-                <span className="font-bold">{step.amount == 0 ? '' : `x${step.amount}`}</span>
-                </div>
 
             </div>
             ))}

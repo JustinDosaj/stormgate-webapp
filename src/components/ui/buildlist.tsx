@@ -135,7 +135,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
   };
 
   return (
-    <Container className="py-8 px-4 md:px-8 bg-gray-900 text-white w-full">
+    <Container className=" px-4 md:px-8 bg-gray-900 text-white w-full min-h-screen">
       <div className="container mx-auto">
         {/* Title and Create Button */}
         <div className="flex items-center justify-between mb-6">
@@ -245,7 +245,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
         <div className="bg-gray-800 rounded-b-md">
           {loading ? (
             // Display skeleton loaders if loading
-            Array.from({ length: BUILDS_PER_PAGE }).map((_, index) => (
+            Array.from({ length: 1 }).map((_, index) => (
               <SkeletonLoader key={index} />
             ))
           ) : (

@@ -198,20 +198,21 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
             Watch on Twitch
           </a>
         </div>
-        <div className="mb-8">
-          <p className="font-semibold">Additional Information:</p>
-          <p>{build.description}</p>
-        </div>
-
+        { build.description !== "" && (
+          <div className="mb-8">
+            <p className="font-semibold">Additional Information:</p>
+            <p>{build.description}</p>
+          </div>
+        )
+        }
         {/* Build Steps */}
         <h2 className="text-2xl font-semibold mb-4">Build Order Steps</h2>
 
         {/* List Header */}
-        <div className="grid grid-cols-4 gap-4 bg-gray-700 p-4 font-semibold text-gray-300 border-b border-gray-400 rounded-t-md">
+        <div className="grid grid-cols-3 gap-4 bg-gray-700 p-4 font-semibold text-gray-300 border-b border-gray-400 rounded-t-md">
           <div>Timing</div>
           <div>Unit/Structure/Action</div>
           <div>Description</div>
-          <div>Amount</div>
         </div>
 
         {/* Steps List */}
