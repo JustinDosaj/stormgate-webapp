@@ -74,8 +74,8 @@ export default function AddBuildInfo({
                   onChange={(e) => setFaction(e.target.value.toLowerCase())}
                 >
                   <option value="vanguard">Vanguard</option>
-                  <option value="infernal">Infernal</option>
-                  <option value="celestial">Celestial</option>
+                  <option value="infernals">Infernal</option>
+                  <option value="celestials">Celestial</option>
                 </select>
               </div>
               <div>
@@ -88,8 +88,8 @@ export default function AddBuildInfo({
                 >
                   <option value="any">Any</option>
                   <option value="vanguard">Vanguard</option>
-                  <option value="infernal">Infernal</option>
-                  <option value="celestial">Celestial</option>
+                  <option value="infernals">Infernal</option>
+                  <option value="celestials">Celestial</option>
                 </select>
               </div>
               <div>

@@ -10,10 +10,12 @@ export interface Build {
     slug: string;
     title: string;
     author: string;
+    ownerId?: string;
     faction: string;
     enemyFaction: string;
     likes: number;
     dateCreated: string;
+    timestamp?: number;
 }
 
 export interface BuildStep {

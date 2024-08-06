@@ -6,15 +6,18 @@ import { BellIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 import { Container } from '../shared/container';
 import { useRouter } from 'next/router';
 import { BuildListProps } from '@/constants/interfaces';
+import { useState } from 'react';
+
 
 const BuildList: React.FC<BuildListProps> = ({ builds, title, currentPage, totalPages }) => {
 
   const router = useRouter();
 
+
   // Function to navigate pages
   const navigateToPage = (pageNumber: number) => {
     router.push(`/?page=${pageNumber}`);
-  };
+  }; 
 
   return (
     <Container className="py-8 px-4 md:px-8 bg-gray-900 text-white w-full">

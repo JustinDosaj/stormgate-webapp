@@ -11,7 +11,7 @@ export const getDropdownOptions = (faction: string) => {
           abilities: abilitiesOptions.vanguard,
           timing: timingOptions.vanguard,
         };
-      case 'celestial':
+      case 'celestials':
         return {
           structures: structureOptions2.celestials,
           units: unitOptions2.celestials,
@@ -20,7 +20,7 @@ export const getDropdownOptions = (faction: string) => {
           abilities: abilitiesOptions.celestials,
           timing: timingOptions.celestials,
         };
-      case 'infernal':
+      case 'infernals':
         return {
           structures: structureOptions2.infernals,
           units: unitOptions2.infernals,

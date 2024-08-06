@@ -12,6 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 import { BuildViewList } from "@/components/ui/buildview/list";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { Notify } from "@/components/shared/notify";
+import { classNames } from "@/components/shared/classNames";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -93,7 +94,9 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
     }
 
     if (hasLiked) {
-      Notify("You've already liked this build!")
+      await UpdateLikesInFirebase({likes, id, user, remove: true})
+      setLikes(likes - 1);
+      setHasLiked(false);
       return;
     }
 
@@ -121,7 +124,7 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
             <div className="flex items-center justify-center">
               <button
                 onClick={handleLike}
-                className="flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-all duration-200 ease-in-out"
+                className={classNames(hasLiked ? "bg-violet-700 hover:bg-gray-900 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-800", "flex items-center font-bold py-2 px-4 rounded-full transition-all duration-200 ease-in-out")}
               >
                 <HandThumbUpIcon className="h-8 w-8 mr-2" />
                 {likes} Likes

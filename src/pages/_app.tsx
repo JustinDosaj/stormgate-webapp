@@ -7,6 +7,7 @@ import GlobalModal from "@/components/shared/modal";
 import { ModalProvider } from "@/context/ModalContext";
 import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/elements/navbar";
+import Footer from "@/components/elements/footer";
 
 const customToastStyle = {
   backgroundColor: '#1f2937', // Tailwind's bg-gray-800
@@ -39,6 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
           draggable={true} // Enable drag to close
           theme="dark" // Apply dark theme
         />
+        <Footer/>
       </ModalProvider>
       </div>
     </AuthProvider>
