@@ -62,7 +62,6 @@ export default function AddBuildInfo({
                   onChange={(e) => setGameMode(e.target.value)}
                 >
                   <option>1v1</option>
-                  <option>3vE</option>
                 </select>
               </div>
               <div>

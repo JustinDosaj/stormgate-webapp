@@ -15,8 +15,6 @@ export default function ProfileComponent({className}: ProfileProps) {
     const [ editing, setEditing ] = useState<boolean>(false)
     const [ newUsername, setNewUsername ] = useState<string>('')
 
-    console.log(username)
-
     const handleUserNameChange = async () => {
 
         if(editing && user) {

@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { BuildViewList } from "@/components/ui/buildview/list";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
-import { Notify } from "@/components/shared/notify";
+import { useModal } from "@/context/ModalContext";
 import { classNames } from "@/components/shared/classNames";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -68,11 +68,14 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
   username,
 }) => {
 
+
+  const { user, isLoading } = useAuth();
+  const { openModal } = useModal();
   const router = useRouter();
   const [ isOwner, setIsOwner ] = useState<boolean>(false)
-  const { user, isLoading } = useAuth();
   const [likes, setLikes] = useState<number>(build?.data.likes || 0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
+
 
   useEffect(() => {
     
@@ -87,9 +90,18 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string }
   },[user, isLoading, build.data.likedBy])
 
   const handleLike = async () => {
+
     
     if (!user) {
-      ("You must be logged in to like a build!")
+      openModal(
+        "Must Be Logged In", 
+        "Please login or create an account to like this build.", 
+        "Login/Signup", 
+        "auth", 
+        false,
+        build.id,
+        slug,
+      )
       return;
     }
 

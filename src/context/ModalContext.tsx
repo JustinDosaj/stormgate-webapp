@@ -1,7 +1,7 @@
 // context/ModalContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-type ModalStatus = 'info' | 'error' | 'success' | 'warning';
+type ModalStatus = 'info' | 'error' | 'success' | 'warning' | 'auth';
 
 interface ModalContextProps {
   isOpen: boolean;
@@ -10,7 +10,9 @@ interface ModalContextProps {
   buttonName: string;
   displayAd: boolean;
   status: ModalStatus;
-  openModal: (title: string, text: string, buttonName: string, status: ModalStatus, displayAd?: boolean, role?: string | null) => void;
+  id?: number;
+  slug?: string;
+  openModal: (title: string, text: string, buttonName: string, status: ModalStatus, displayAd?: boolean, id?: number, slug?: string) => void;
   closeModal: () => void;
 }
 
@@ -21,15 +23,19 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [buttonName, setButtonName] = useState('');
+  const [ id, setId] = useState(0);
+  const [ slug, setSlug] = useState('');
   const [displayAd, setDisplayAd] = useState(false);
   const [status, setStatus] = useState<ModalStatus>('info');
 
-  const openModal = ( title: string, text: string, buttonName: string, status: ModalStatus, displayAd = false ) => {
+  const openModal = ( title: string, text: string, buttonName: string, status: ModalStatus, displayAd = false, id = 0, slug = '' ) => {
     setTitle(title);
     setText(text);
     setButtonName(buttonName);
     setStatus(status);
     setDisplayAd(displayAd);
+    setId(id);
+    setSlug(slug);
     setIsOpen(true);
   };
 
@@ -38,7 +44,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, title, text, buttonName, displayAd, status, openModal, closeModal }}>
+    <ModalContext.Provider value={{ isOpen, title, text, buttonName, displayAd, status, id, slug, openModal, closeModal }}>
       {children}
     </ModalContext.Provider>
   );

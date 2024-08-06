@@ -17,6 +17,7 @@ const statusIcons = {
   error: <ExclamationTriangleIcon className='text-red-500 h-8 w-8' aria-hidden="true" />,
   success: <CheckCircleIcon className='text-green-500 h-8 w-8' aria-hidden="true" />,
   warning: <ExclamationTriangleIcon className='text-yellow-600 h-8 w-8' aria-hidden="true" />,
+  auth: <InformationCircleIcon className='text-violet-600 h-8 w-8' aria-hidden="true" />,
 };
 
 const borderColor = {
@@ -24,15 +25,26 @@ const borderColor = {
     error: 'border-red-500/50',
     success: 'border-green-500/50',
     warning: 'border-yellow-600/50',
+    auth: 'border-violet-600/50',
 }
 
+
 const GlobalModal: React.FC = () => {
+    
     const cancelButtonRef = useRef(null);
     const router = useRouter();
-    const { isOpen, title, text, displayAd, status, closeModal } = useModal();
+    const { isOpen, title, text, displayAd, status, closeModal, buttonName, id, slug } = useModal();
+
+    const modalAction = {
+        info: "/",
+        error: "/",
+        success: "/",
+        warning: "/",
+        auth: `/auth/login?redirect=/builds/${id?.toString()}/${slug}`,
+    }
 
     const onButtonClick = () => {
-        router.push('/');
+        router.push(modalAction[status]);
         closeModal();
     };
 
@@ -86,7 +98,7 @@ const GlobalModal: React.FC = () => {
                                     className="mt-3 inline-flex w-full justify-center rounded-3xl bg-gray-800 hover:bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 sm:col-start-2 sm:mt-0"
                                     onClick={onButtonClick}
                                 >
-                                    Continue
+                                    {buttonName}
                                 </button>
                                 <button
                                     type="button"
