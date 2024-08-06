@@ -19,6 +19,7 @@ import Steps from '@/components/ui/add-build/steps';
 import SubmitButtons from '@/components/ui/add-build/submit';
 import { Notify } from '@/components/shared/notify';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 
 export interface BuildStep {
@@ -70,6 +71,8 @@ export default function AddBuild() {
 
     if (buildName === '' || !buildName) {
       Notify('Build name is required')
+      setLoading(false)
+      return;
     }
 
     if (youtubeLink !== '') {
@@ -98,7 +101,9 @@ export default function AddBuild() {
       const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps };
 
       const routerPath = await AddBuildToFirebase({ build, user });
-  
+    
+      
+      router.push(`/builds/${routerPath.id}/${routerPath.slug}`)
       // Reset form
       setBuildName('');
       setSummary('');
@@ -109,14 +114,10 @@ export default function AddBuild() {
       setTwitchLink('');
       setDescription('');
       setSteps(initialSteps);
-      
-      router.push(`/builds/${routerPath.id}/${routerPath.slug}`)
-      
+      setLoading(false);
 
     } catch (error) {
       console.error('Error adding build:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -176,45 +177,51 @@ export default function AddBuild() {
   };
 
   return (
-    <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
-      <Container className="w-full max-w-4xl">
-        <h1 className="text-3xl font-bold mb-8 text-white">Add New Build</h1>
-        <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-          {/* Left Side: Build Information */}
-          <AddBuildInfo
-            buildName={buildName}
-            setBuildName={setBuildName}
-            summary={summary}
-            setSummary={setSummary}
-            gameMode={gameMode}
-            setGameMode={setGameMode}
-            faction={faction}
-            setFaction={setFaction}
-            enemyFaction={enemyFaction}
-            setEnemyFaction={setEnemyFaction}
-            youtubeLink={youtubeLink}
-            setYoutubeLink={setYoutubeLink}
-            twitchLink={twitchLink}
-            setTwitchLink={setTwitchLink}
-            description={description}
-            setDescription={setDescription}
-          />
-
-          {/* Right Side: Build Order Steps */}
-          <Steps 
-            sensors={sensors} 
-            steps={steps} 
-            faction={faction} 
-            handleDragEnd={handleDragEnd}
-            handleStepChange={handleStepChange}
-            removeStep={removeStep}
-            addStep={addStep}
+    <>
+      <Head>
+        <title>Stormgate Tactics | Add Build</title>
+        <meta name="robots" content="noindex" />
+      </Head>
+      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
+        <Container className="w-full max-w-4xl">
+          <h1 className="text-3xl font-bold mb-8 text-white">Add New Build</h1>
+          <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
+            {/* Left Side: Build Information */}
+            <AddBuildInfo
+              buildName={buildName}
+              setBuildName={setBuildName}
+              summary={summary}
+              setSummary={setSummary}
+              gameMode={gameMode}
+              setGameMode={setGameMode}
+              faction={faction}
+              setFaction={setFaction}
+              enemyFaction={enemyFaction}
+              setEnemyFaction={setEnemyFaction}
+              youtubeLink={youtubeLink}
+              setYoutubeLink={setYoutubeLink}
+              twitchLink={twitchLink}
+              setTwitchLink={setTwitchLink}
+              description={description}
+              setDescription={setDescription}
             />
-        </div>
-        
-        <SubmitButtons handleSubmit={handleSubmit} loading={loading}/>
 
-      </Container>
-    </main>
+            {/* Right Side: Build Order Steps */}
+            <Steps 
+              sensors={sensors} 
+              steps={steps} 
+              faction={faction} 
+              handleDragEnd={handleDragEnd}
+              handleStepChange={handleStepChange}
+              removeStep={removeStep}
+              addStep={addStep}
+              />
+          </div>
+          
+          <SubmitButtons handleSubmit={handleSubmit} loading={loading}/>
+
+        </Container>
+      </main>
+    </>
   );
 }

@@ -16,7 +16,7 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { useRouter } from 'next/router';
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { generateSlug } from '@/utils/generateSlug';
 import SubmitButtons from '@/components/ui/add-build/submit';
@@ -24,6 +24,7 @@ import { Notify } from '@/components/shared/notify';
 import Steps from '@/components/ui/add-build/steps';
 import { BuildStep } from '@/constants/interfaces';
 import { UpdateBuildInFirebase } from '@/pages/api/firebase/functions';
+import Head from 'next/head';
 
 export default function EditBuild() {
 
@@ -185,48 +186,54 @@ export default function EditBuild() {
   };
 
   return (
-    <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
-      <Container className="w-full max-w-4xl">
-        <h1 className="text-3xl font-bold mb-8 text-white">Edit Build</h1>
-        <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
-          {/* Left Side: Build Information */}
+    <>
+      <Head>
+        <title>Stormgate Tactics | Edit Build</title>
+        <meta name='robots' content='noindex' />
+      </Head>
+      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
+        <Container className="w-full max-w-4xl">
+          <h1 className="text-3xl font-bold mb-8 text-white">Edit Build</h1>
+          <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
+            {/* Left Side: Build Information */}
+            
+            <AddBuildInfo
+              buildName={buildName}
+              setBuildName={setBuildName}
+              summary={summary}
+              setSummary={setSummary}
+              gameMode={gameMode}
+              setGameMode={setGameMode}
+              faction={faction}
+              setFaction={setFaction}
+              enemyFaction={enemyFaction}
+              setEnemyFaction={setEnemyFaction}
+              youtubeLink={youtubeLink}
+              setYoutubeLink={setYoutubeLink}
+              twitchLink={twitchLink}
+              setTwitchLink={setTwitchLink}
+              description={description}
+              setDescription={setDescription}
+            />
+
+            {/* Right Side: Build Order Steps */}
+            <Steps 
+              sensors={sensors} 
+              steps={steps} 
+              faction={faction} 
+              handleDragEnd={handleDragEnd}
+              handleStepChange={handleStepChange}
+              removeStep={removeStep}
+              addStep={addStep}
+            />
+          </div>
+
+          {/* Submit Button */}
           
-          <AddBuildInfo
-            buildName={buildName}
-            setBuildName={setBuildName}
-            summary={summary}
-            setSummary={setSummary}
-            gameMode={gameMode}
-            setGameMode={setGameMode}
-            faction={faction}
-            setFaction={setFaction}
-            enemyFaction={enemyFaction}
-            setEnemyFaction={setEnemyFaction}
-            youtubeLink={youtubeLink}
-            setYoutubeLink={setYoutubeLink}
-            twitchLink={twitchLink}
-            setTwitchLink={setTwitchLink}
-            description={description}
-            setDescription={setDescription}
-          />
+          <SubmitButtons handleSubmit={handleSubmit} loading={loading}/>
 
-          {/* Right Side: Build Order Steps */}
-          <Steps 
-            sensors={sensors} 
-            steps={steps} 
-            faction={faction} 
-            handleDragEnd={handleDragEnd}
-            handleStepChange={handleStepChange}
-            removeStep={removeStep}
-            addStep={addStep}
-          />
-        </div>
-
-        {/* Submit Button */}
-        
-        <SubmitButtons handleSubmit={handleSubmit} loading={loading}/>
-
-      </Container>
-    </main>
+        </Container>
+      </main>
+    </>
   );
 }
