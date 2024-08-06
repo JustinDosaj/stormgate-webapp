@@ -22,8 +22,8 @@ export default function Profile() {
   }, [user, isLoading, router]);
 
   return (
-    <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 space-y-12 ${inter.className}`}>
-      <ProfileComponent className="w-1/2" />
+    <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 space-y-24 ${inter.className}`}>
+      <ProfileComponent />
       <BuildList title={"Your Build Orders"} userId={user?.uid}/>
     </main>
   );
