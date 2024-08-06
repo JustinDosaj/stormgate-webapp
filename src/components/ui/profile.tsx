@@ -4,6 +4,7 @@ import { Button } from "../shared/button";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { UpdateUsername } from "@/pages/api/firebase/functions";
+import { Notify } from "../shared/notify";
 
 interface ProfileProps {
     className?: string;

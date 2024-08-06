@@ -1,8 +1,9 @@
-import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc, increment, arrayRemove } from 'firebase/firestore';
+import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc, increment, arrayRemove, deleteDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db } from '@/lib/firebase';
 import { generateSlug } from '@/utils/generateSlug';
 import { generateRandomUsername } from '@/utils/generateUsernames';
+import { Notify } from '@/components/shared/notify';
 
 interface AddBuildProps {
     build?: any;
@@ -127,9 +128,6 @@ export async function CheckForDuplicateUserName() {
 export async function UpdateUsername({user, newUsername, username}: AddBuildProps) {
 
     if (newUsername === username) { 
-        
-        // Add Notification Here to information username has not changed
-
         return; 
     }
     
@@ -137,7 +135,9 @@ export async function UpdateUsername({user, newUsername, username}: AddBuildProp
 
     await setDoc(userDocRef, {
         username: newUsername,
-    }, {merge: true})
+    }, {merge: true}).then(() => {
+        Notify("Username updated successfully")
+    })
 
     return;
 }
@@ -179,5 +179,30 @@ export async function UpdateLikesInFirebase({likes, id, user, remove}: LikesProp
             "data.likes": increment(1),
             "data.likedBy": arrayUnion(user.uid),
         });
+    }
+}
+
+interface DeleteBuildProps {
+    userId: string;
+    buildId: string;
+}
+
+export async function DeleteBuildFromFirebase({userId, buildId}: DeleteBuildProps) {
+    try {
+        // Reference the build document in the 'builds' collection
+        const buildDocRef = doc(db, 'builds', buildId);
+
+        // Reference the user's document and "my-builds" subcollection
+        const userDocRef = doc(db, 'users', userId);
+        const myBuildsDocRef = doc(userDocRef, 'my-builds', buildId);
+
+        // Delete the build document from the 'builds' collection
+        await deleteDoc(buildDocRef);
+
+        // Delete the reference from the user's "my-builds" subcollection
+        await deleteDoc(myBuildsDocRef);
+
+    } catch (error) {
+        console.error("Error deleting build: ", error);
     }
 }
