@@ -35,8 +35,12 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
     sortBy: 'likes', // Default to sorting by likes
   });
 
-  const searchClient = algoliasearch('IWZ4YN8O57', 'fce4ad6ae8c31f0c8e29644c3941c864');
-  const index: SearchIndex = searchClient.initIndex(filters.sortBy === "likes" ? 'TEST_BUILDS_likes' : filters.sortBy === "createdAt" ? 'TEST_BUILDS_createdAt' : `TEST_BUILDS`);
+  const searchClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APPLICATION_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY as string);
+  const index: SearchIndex = searchClient.initIndex(
+      filters.sortBy === "likes" ? process.env.NEXT_PUBLIC_ALGOLIA_VINDEX_LIKES as string
+    : filters.sortBy === "createdAt" ? process.env.NEXT_PUBLIC_ALGOLIA_VINDEX_CREATEDAT as string
+    : process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string
+  );
 
   const router = useRouter();
 
