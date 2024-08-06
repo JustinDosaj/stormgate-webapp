@@ -1,6 +1,6 @@
 // pages/index.tsx
 import Link from 'next/link';
-import { Button } from '../elements/button';
+import { Button } from '../shared/button';
 import { Container } from '../shared/container';
 
 export function Hero() {
