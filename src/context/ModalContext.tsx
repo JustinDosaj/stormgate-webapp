@@ -1,7 +1,7 @@
 // context/ModalContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-type ModalStatus = 'info' | 'error' | 'success' | 'warning' | 'auth';
+type ModalStatus = 'info' | 'error' | 'success' | 'warning' | 'auth' | 'delete';
 
 interface ModalContextProps {
   isOpen: boolean;
@@ -10,32 +10,36 @@ interface ModalContextProps {
   buttonName: string;
   displayAd: boolean;
   status: ModalStatus;
-  id?: number;
+  buildId?: string;
   slug?: string;
-  openModal: (title: string, text: string, buttonName: string, status: ModalStatus, displayAd?: boolean, id?: number, slug?: string) => void;
+  userId?: string;
+  openModal: (title: string, text: string, buttonName: string, status: ModalStatus, displayAd?: boolean, buildId?: number, slug?: string, userId?: string) => void;
   closeModal: () => void;
 }
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [buttonName, setButtonName] = useState('');
-  const [ id, setId] = useState(0);
+  const [ buildId, setBuildId] = useState('');
   const [ slug, setSlug] = useState('');
   const [displayAd, setDisplayAd] = useState(false);
   const [status, setStatus] = useState<ModalStatus>('info');
+  const [userId, setUserId] = useState('');
 
-  const openModal = ( title: string, text: string, buttonName: string, status: ModalStatus, displayAd = false, id = 0, slug = '' ) => {
+  const openModal = ( title: string, text: string, buttonName: string, status: ModalStatus, displayAd = false, buildId = 0, slug = '', userId = '' ) => {
     setTitle(title);
     setText(text);
     setButtonName(buttonName);
     setStatus(status);
     setDisplayAd(displayAd);
-    setId(id);
+    setBuildId(buildId.toString());
     setSlug(slug);
+    setUserId(userId);
     setIsOpen(true);
   };
 
@@ -44,7 +48,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <ModalContext.Provider value={{ isOpen, title, text, buttonName, displayAd, status, id, slug, openModal, closeModal }}>
+    <ModalContext.Provider value={{ isOpen, title, text, buttonName, displayAd, status, buildId, slug, userId, openModal, closeModal }}>
       {children}
     </ModalContext.Provider>
   );

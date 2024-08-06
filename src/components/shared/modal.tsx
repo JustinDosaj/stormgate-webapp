@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { BookOpenIcon, ExclamationTriangleIcon, CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/router';
 import { useModal } from '@/context/ModalContext';
+import { DeleteBuildFromFirebase } from '@/pages/api/firebase/functions';
+import { TrashIcon } from '@heroicons/react/24/solid';
 
 /*const AdSenseDisplay = dynamic(() => import('@/components/tags/adsense'), {
   ssr: false,
@@ -18,6 +20,7 @@ const statusIcons = {
   success: <CheckCircleIcon className='text-green-500 h-8 w-8' aria-hidden="true" />,
   warning: <ExclamationTriangleIcon className='text-yellow-600 h-8 w-8' aria-hidden="true" />,
   auth: <InformationCircleIcon className='text-violet-600 h-8 w-8' aria-hidden="true" />,
+  delete: <TrashIcon className='text-red-500 h-8 w-8' aria-hidden="true" />,
 };
 
 const borderColor = {
@@ -26,25 +29,45 @@ const borderColor = {
     success: 'border-green-500/50',
     warning: 'border-yellow-600/50',
     auth: 'border-violet-600/50',
+    delete: 'border-red-500/50',
 }
+
 
 
 const GlobalModal: React.FC = () => {
     
     const cancelButtonRef = useRef(null);
     const router = useRouter();
-    const { isOpen, title, text, displayAd, status, closeModal, buttonName, id, slug } = useModal();
+    const { isOpen, title, text, displayAd, status, closeModal, buttonName, buildId, slug, userId } = useModal();
 
     const modalAction = {
         info: "/",
         error: "/",
         success: "/",
         warning: "/",
-        auth: `/auth/login?redirect=/builds/${id?.toString()}/${slug}`,
+        auth: `/auth/login?redirect=/builds/${buildId?.toString()}/${slug}`,
+        delete: async () => { 
+
+            if (userId && buildId) {
+                console.log("trying to delete")
+                await DeleteBuildFromFirebase({ userId: userId, buildId: buildId }) 
+            }
+            else {
+                console.log("didnt trying to delete")
+                return;
+            }
+        },
     }
 
     const onButtonClick = () => {
-        router.push(modalAction[status]);
+        
+        if (status === 'delete') {
+            modalAction.delete();
+            router.push('/');
+        } else {
+            router.push(modalAction[status]);
+        }
+
         closeModal();
     };
 
@@ -95,14 +118,14 @@ const GlobalModal: React.FC = () => {
 
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                                 <button
-                                    className="mt-3 inline-flex w-full justify-center rounded-3xl bg-gray-800 hover:bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 sm:col-start-2 sm:mt-0"
+                                    className="mt-3 inline-flex w-full justify-center rounded-3xl bg-violet-700 hover:bg-violet-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 sm:col-start-2 sm:mt-0"
                                     onClick={onButtonClick}
                                 >
                                     {buttonName}
                                 </button>
                                 <button
                                     type="button"
-                                    className="mt-3 inline-flex w-full justify-center rounded-3xl bg-gray-700 hover:bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 sm:col-start-1 sm:mt-0"
+                                    className="mt-3 inline-flex w-full justify-center rounded-3xl bg-gray-00 hover:bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 sm:col-start-1 sm:mt-0"
                                     onClick={closeModal}
                                     ref={cancelButtonRef}
                                 >
