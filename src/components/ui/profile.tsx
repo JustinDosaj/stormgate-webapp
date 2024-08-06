@@ -33,7 +33,7 @@ export default function ProfileComponent({className}: ProfileProps) {
     },[isLoading, username])
 
     return(
-    <Container className={`py-8 px-4 md:px-8 bg-gray-900 text-white w-full ${className}`}>
+    <Container className={` bg-gray-900 text-white ${className}`}>
         <div className="container mx-auto">
             {/* Title */}
             <div className="flex items-center justify-between mb-6">
