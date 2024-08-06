@@ -2,5 +2,5 @@
 import { createClient } from "contentful-management";
 
 export const managementClient = createClient({
-  accessToken: "YOUR_MANAGEMENT_ACCESS_TOKEN",
+  accessToken: `${process.env.NEXT_PUBLIC_CONTENTFUL_MANAGEMENT_ACCESS_TOKEN}`,
 });

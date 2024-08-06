@@ -21,7 +21,7 @@ export function Button({text, buttonType, className, children, onClick, isDisabl
 
     return(
         <button type={buttonType} onClick={onClick} disabled={isDisabled}
-            className={`text-white bg-blue-700 hover:bg-blue-900 ${buttonSize[size]} rounded-md outline-none relative overflow-hidden border duration-200 ease-linear
+            className={`text-white bg-violet-700 hover:bg-violet-900 ${buttonSize[size]} rounded-md outline-none relative overflow-hidden border duration-200 ease-linear
                 hover:after:opacity-100 font-semibold ${className}`}>
                     <span className="relative z-10">{text}</span>
                     {children}
