@@ -16,9 +16,9 @@ import {
 import { AddBuildToFirebase } from '../api/firebase/functions';
 import AddBuildInfo from '@/components/ui/add-build/info';
 import Steps from '@/components/ui/add-build/steps';
-import { useModal } from '@/context/ModalContext';
 import SubmitButtons from '@/components/ui/add-build/submit';
 import { Notify } from '@/components/shared/notify';
+import { useRouter } from 'next/router';
 
 
 export interface BuildStep {
@@ -50,7 +50,6 @@ const initialSteps: BuildStep[] = [
 
 export default function AddBuild() {
 
-  const { openModal } = useModal();
   const [buildName, setBuildName] = useState('');
   const [summary, setSummary] = useState('');
   const [gameMode, setGameMode] = useState('1v1');
@@ -61,6 +60,7 @@ export default function AddBuild() {
   const [description, setDescription] = useState('');
   const [steps, setSteps] = useState<BuildStep[]>(initialSteps);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const { user } = useAuth();
 
   const auth = useRequireAuth();
@@ -97,7 +97,7 @@ export default function AddBuild() {
     try {
       const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps };
 
-      await AddBuildToFirebase({ build, user });
+      const routerPath = await AddBuildToFirebase({ build, user });
   
       // Reset form
       setBuildName('');
@@ -109,8 +109,10 @@ export default function AddBuild() {
       setTwitchLink('');
       setDescription('');
       setSteps(initialSteps);
-  
-      console.log('Build successfully added.');
+      
+      router.push(`/builds/${routerPath.id}/${routerPath.slug}`)
+      
+
     } catch (error) {
       console.error('Error adding build:', error);
     } finally {

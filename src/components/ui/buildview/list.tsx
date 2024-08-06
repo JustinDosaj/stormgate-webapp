@@ -28,7 +28,7 @@ export function BuildViewList({build}: any) {
 
                 {/* Amount */}
                 <div className="text-center">
-                <span className="font-bold">{step.amount}</span>
+                <span className="font-bold">{step.amount == 0 ? '' : `x${step.amount}`}</span>
                 </div>
 
             </div>

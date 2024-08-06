@@ -58,7 +58,6 @@ export const SortableItem: React.FC<SortableItemProps> = ({
 
 
   const { structures, units, research, advancedResearch, abilities, timing } = getDropdownOptions(faction);
-  const dropDownOptions = getDropdownOptions(faction);
 
   return (
     <div
@@ -112,13 +111,24 @@ export const SortableItem: React.FC<SortableItemProps> = ({
           className="p-1 bg-gray-600 text-white rounded-md w-56" // Set fixed width for the select box
           style={{ width: '14rem', whiteSpace: 'normal', overflowWrap: 'break-word', height: 'auto' }} // Added styles for fixed dropdown width and text wrapping
           value={step.action.value}
-          onChange={(e) =>
+          onChange={(e) => {
+            // Determine the selected type (Structure, Units, etc.)
+            const selectedType = structures.some(option => option.label === e.target.value)
+              ? 'structure'
+              : step.action.type;
+
             handleStepChange(index, 'action', {
               ...step.action,
               value: e.target.value,
-            })
-          }
+              type: selectedType, // Set the type appropriately
+            });
+          }}
         >
+          <optgroup label="Default">
+              <option key={"None"} value={"none"} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>
+                {"None"}
+              </option>
+          </optgroup>
           <optgroup label="Structure">
             {structures.map((option) => (
               <option key={option.label} value={option.label} style={{ whiteSpace: 'normal', overflowWrap: 'break-word' }}>

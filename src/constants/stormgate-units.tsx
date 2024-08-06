@@ -1,9 +1,3 @@
-// Temporary Data for Dropdowns
-export const unitOptions = [
-  { label: 'Marine'},
-  { label: 'Marauder'},
-];
-
 export const actionOptions = [
   { label: 'Creep'},
   { label: 'Attack'},
@@ -213,7 +207,7 @@ export const abilitiesOptions = {
     { label: 'Summon Aeon Gate'},
   ],
   infernals: [
-    { label: 'Summong Effigy'},
+    { label: 'Summon Effigy'},
     { label: 'Nightfall Infestation'},
     { label: 'Hellspawn Resurgence'},
     { label: 'Shroudstone Manifestation'},

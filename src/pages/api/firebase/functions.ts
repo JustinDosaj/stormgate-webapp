@@ -1,4 +1,4 @@
-import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc, increment } from 'firebase/firestore';
+import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc, increment, arrayRemove } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db } from '@/lib/firebase';
 import { generateSlug } from '@/utils/generateSlug';
@@ -20,7 +20,7 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
 
     const userDocRef = doc(db, 'users', uid)
     const buildsCollectionRef = collection(db, 'builds')
-    const date = new Date().toISOString()
+    const date = new Date().getTime()
     const slug = await generateSlug(buildName)
 
     const fullBuild = {
@@ -77,7 +77,9 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
         slug,
     });
 
-    return;
+    const id = buildDocRef.id
+
+    return {slug, id};
 }
 
 export async function UpdateBuildInFirebase({build, user}: AddBuildProps) {
@@ -159,14 +161,23 @@ interface LikesProps {
     id: string;
     user: User;
     likes: number | 0;
+    remove?: boolean;
 }
 
-export async function UpdateLikesInFirebase({likes, id, user}: LikesProps) {
+export async function UpdateLikesInFirebase({likes, id, user, remove}: LikesProps) {
 
     const buildDocRef = doc(db, 'builds', id);
     
-    await updateDoc(buildDocRef, {
-        "data.likes": increment(1),
-        "data.likedBy": arrayUnion(user.uid),
-    });
+    if(remove == true) {
+        await updateDoc(buildDocRef, {
+            "data.likes": increment(-1),
+            "data.likedBy": arrayRemove(user.uid),
+        });
+        return;
+    } else {
+        await updateDoc(buildDocRef, {
+            "data.likes": increment(1),
+            "data.likedBy": arrayUnion(user.uid),
+        });
+    }
 }
