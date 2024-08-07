@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { UserCircleIcon, XMarkIcon, Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 const navItems = [
   { href: '/', label: 'Home', isDropDown: false },
@@ -17,7 +18,7 @@ const buildNav = [
 ];
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const { user, username } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBuildsOpen, setIsBuildsOpen] = useState(false); // State to toggle Builds submenu in mobile
 
@@ -25,10 +26,11 @@ export default function Navbar() {
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center space-x-2">
-          {/* LOGO PLACEHOLDER */}
-          <UserCircleIcon className="h-10 w-10" />
-        </div>
+        <Link href="/">
+          <div className="flex items-center space-x-2">
+            <img src="/images/logos/sg-logo-250x50.png" alt="Stormgate Tactics Logo" className="h-10 w-auto" />
+          </div>
+        </Link>
 
         {/* Desktop Navigation Links Centered */}
         <ul className="hidden md:flex space-x-12 justify-center absolute left-1/2 transform -translate-x-1/2">
@@ -62,7 +64,7 @@ export default function Navbar() {
         {/* Desktop User Profile Section */}
         <div className="items-center hidden md:flex space-x-1">
           {user ? (
-            <span>{user.email}</span>
+            <span>{username}</span>
           ) : (
             <>
               <span>Not logged in | </span>
@@ -145,7 +147,7 @@ export default function Navbar() {
               <UserCircleIcon className="h-8 w-8 text-gray-300" />
               {user ? (
                 <>
-                  <span>{user.email}</span>
+                  <span>{username}</span>
                 </>
               ) : (
                 <>
