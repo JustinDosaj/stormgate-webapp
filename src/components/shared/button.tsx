@@ -22,7 +22,7 @@ export function Button({text, buttonType, className, children, onClick, isDisabl
     }
 
     const buttonColor = {
-        'violet': 'bg-violet-700 hover:bg-violet-900',
+        'violet': 'bg-violet-600 hover:bg-violet-800',
         'red': 'bg-red-600 hover:bg-red-800',
         'green': 'bg-green-500 hover:bg-green-700',
         'blue': 'bg-blue-700 hover:bg-blue-900',
