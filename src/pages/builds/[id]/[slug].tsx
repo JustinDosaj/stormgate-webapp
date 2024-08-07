@@ -82,7 +82,6 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
   const [ isOwner, setIsOwner ] = useState<boolean>(false)
   const [likes, setLikes] = useState<number>(build?.data.likes || 0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
-  console.log(build)
   const { buildName, data, description, enemyFaction, faction, gameMode, owner, steps, summary, twitchLink, youtubeLink } = build;
 
 
@@ -144,59 +143,61 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Stormgate Tactics" />
       </Head>
-      <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
-        <Container className="p-6 max-w-4xl mx-auto bg-gray-800 text-white rounded-lg shadow-lg">
+      <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between py-24 ${inter.className}`}>
+        <Container className="p-6 max-w-4xl mx-auto bg-gray-900 text-white rounded-lg shadow-lg">
           {/* General Build Information */}
-          <div className="flex items-center justify-between mb-3">
+          <div className="lg:flex items-center justify-between mb-3 space-y-4 lg:space-y-0">
             <div className="inline-flex items-center gap-4">
               <h1 className="text-3xl font-bold">{build.buildName}</h1>
+            </div>
+            <div className="flex justify-around space-x-4">
               <div className="flex items-center justify-center">
                 <button
                   onClick={handleLike}
-                  className={classNames(hasLiked ? "bg-violet-700 hover:bg-gray-900 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-800", "flex items-center font-bold py-2 px-4 rounded-full transition-all duration-200 ease-in-out")}
+                  className={classNames(hasLiked ? "bg-violet-700 hover:bg-violet-900 text-white" : "bg-gray-200 hover:bg-gray-400 text-gray-800", "flex items-center font-bold py-2 px-4 rounded-full transition-all duration-200 ease-in-out")}
                 >
-                  <HandThumbUpIcon className="h-6 w-6 mr-2" />
-                  {likes} Likes
+                  <HandThumbUpIcon className="h-4 w-4 lg:h-6 lg:w-6 mr-2" />
+                  <span className="text-sm lg:text-base">{likes}</span>
                 </button>
               </div>
+              {isOwner && (
+                <>
+                <Button
+                  text="Edit"
+                  buttonType="button"
+                  size="small"
+                  onClick={() => router.push(`/builds/edit/${id}`)}
+                />
+                <Button
+                  text={"Delete"}
+                  buttonType="button"
+                  color="red"
+                  size="small"
+                  onClick={() => openModal("Delete Build", "Are you sure you want to delete this build?", "Delete", "delete", false, build.id, slug, user?.uid)}
+                />
+                </>
+              )}
             </div>
-            {isOwner && (
-              <div className="flex items-center gap-4">
-              <Button
-                text="Edit"
-                buttonType="button"
-                size="small"
-                onClick={() => router.push(`/builds/edit/${id}`)}
-              />
-              <Button
-                text={"Delete"}
-                buttonType="button"
-                className="bg-red-600 hover:bg-red-800"
-                size="small"
-                onClick={() => openModal("Delete Build", "Are you sure you want to delete this build?", "Delete", "delete", false, build.id, slug, user?.uid)}
-              />
-              </div>
-            )}
           </div>
-          <p className="mb-3">{build.summary}</p>
+          <p className="mb-3">{build.summary || "Hi there"}</p>
           <div className="border-b gray-300 w-full my-3"/>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 text-sm lg:text-base">
             <span className="capitalize">Faction: {build.faction}</span>
             <span className="capitalize">Enemy Faction: {build.enemyFaction}</span>
           </div>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 text-sm lg:text-base">
             <span>Game Mode: {build.gameMode}</span>
             <span>Created by: {username}</span>
           </div>
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 text-sm lg:text-base">
             <span>
               Created At: {new Date(build.data.createdAt).toLocaleDateString()}
             </span>
             <span>
-              Updated At: {new Date(build.data.updatedAt).toLocaleDateString()}
+              Last Updated: {new Date(build.data.updatedAt).toLocaleDateString()}
             </span>
           </div>
-          <div className="mb-4">
+          <div className="mb-4 text-sm lg:text-base">
             <a
               href={build.youtubeLink}
               target="_blank"
@@ -216,7 +217,7 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
             </a>
           </div>
           { build.description !== "" && (
-            <div className="mb-8">
+            <div className="mb-8 text-sm lg:text-base">
               <p className="font-semibold">Additional Information:</p>
               <p>{build.description}</p>
             </div>
@@ -226,9 +227,10 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
           <h2 className="text-2xl font-semibold mb-4">Build Order Steps</h2>
 
           {/* List Header */}
-          <div className="grid grid-cols-3 gap-4 bg-gray-700 p-4 font-semibold text-gray-300 border-b border-gray-400 rounded-t-md">
+          <div className="grid grid-cols-3 gap-4 bg-gray-700 p-4 font-semibold text-gray-300 border-b border-gray-400 rounded-t-md text-sm lg:text-base">
             <div>Timing</div>
-            <div>Unit/Structure/Action</div>
+            <div className="hidden lg:block">Unit/Structure/Action</div>
+            <div className="block lg:hidden">Unit</div>
             <div>Description</div>
           </div>
 

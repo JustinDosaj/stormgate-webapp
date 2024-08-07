@@ -34,24 +34,24 @@ export default function ProfileComponent({className}: ProfileProps) {
 
     return(
     <Container className={` bg-gray-900 text-white ${className}`}>
-        <div className="container mx-auto">
+        <div className="mx-auto">
             {/* Title */}
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-3xl font-bold">{"Account Details"}</h2>
             </div>
-            <div className="flex justify-between bg-gray-800 rounded-md p-4 items-center">
+            <div className="grid lg:flex justify-center lg:justify-between space-y-4 lg:space-y-0 bg-gray-800 rounded-md p-4 items-center">
                 <div className="">
-                    <label className="text-gray-400">Email: </label>
+                    <label className="hidden lg:inline-flex lg:mr-1 text-gray-400">Email: </label>
                     {/* Email Input */}
                     <input
                         type="text"
                         value={user?.email || ''}
                         disabled={true}
-                        className="w-fit pl-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none"
+                        className="w-fit pl-2 py-1 bg-gray-700 text-gray-400 rounded-md focus:outline-none"
                     />
                 </div>
                 <div className="relative">
-                    <label className="text-gray-400">Username: </label>
+                    <label className="hidden lg:inline-flex lg:mr-1 text-gray-400">Username: </label>
                     {/* Email Input */}
                     <input
                         type="text"
@@ -68,7 +68,7 @@ export default function ProfileComponent({className}: ProfileProps) {
                         }
                     </button>
                 </div>
-                <div className="relative">
+                <div className="grid justify-center lg:grid-justify-end">
                     <Button text="Logout" buttonType="button" size="small" className=" bg-red-700 hover:bg-red-600" onClick={logout}/>
                 </div>
             </div>

@@ -21,7 +21,7 @@ export default function Home() {
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Stormgate Tactics" />
     </Head>
-    <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 space-y-12 ${inter.className}`}>
+    <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between py-24 space-y-12 ${inter.className}`}>
       <Hero />
       <BuildList title={"Stormgate Build Orders"}/>
     </main>
