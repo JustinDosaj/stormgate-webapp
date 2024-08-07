@@ -64,13 +64,21 @@ export const SortableItem: React.FC<SortableItemProps> = ({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="bg-gray-700 p-4 rounded-md flex items-center space-x-4"
+      className="bg-gray-700 p-4 rounded-md grid grid-cols-1 md:flex items-center space-x-4 text-sm lg:text-sm md:space-y-0 space-y-4"
     >
       {/* Drag Handle */}
-      <EllipsisVerticalIcon
-        className="h-7 w-7 text-white cursor-grab"
-        {...listeners} // Attach drag listeners to the icon
-      />
+      <div className="grid md:grid-cols-1 grid-cols-2 justify-between items-center">
+        <EllipsisVerticalIcon
+          className="h-7 w-7 text-white cursor-grab"
+          {...listeners} // Attach drag listeners to the icon
+        />
+        {/* Remove Step */}
+        <button onClick={() => removeStep(index)} className="md:hidden grid justify-end">
+          <XMarkIcon className="h-6 w-6 text-red-600 hover:text-red-300" />
+        </button>
+      </div>
+
+      
 
       {/* Icon DropDown for Timing Type */}
       <select
@@ -85,7 +93,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
         }}
       >
         {timing.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className="">
             {option.label}
           </option>
         ))}
@@ -106,10 +114,10 @@ export const SortableItem: React.FC<SortableItemProps> = ({
       />
 
       {/* Action */}
-      <div className="flex items-center space-x-4 flex-grow">
+      <div className="md:flex items-center md:space-x-4 md:flex-grow space-y-4 md:space-y-0">
         <select
-          className="p-1 bg-gray-600 text-white rounded-md w-56" // Set fixed width for the select box
-          style={{ width: '14rem', whiteSpace: 'normal', overflowWrap: 'break-word', height: 'auto' }} // Added styles for fixed dropdown width and text wrapping
+          className="p-1 bg-gray-600 text-white rounded-md w-48" // Set fixed width for the select box
+          style={{ whiteSpace: 'normal', overflowWrap: 'break-word', height: 'auto' }} // Added styles for fixed dropdown width and text wrapping
           value={step.action.value}
           onChange={(e) => {
             // Determine the selected type (Structure, Units, etc.)
@@ -181,7 +189,6 @@ export const SortableItem: React.FC<SortableItemProps> = ({
         />
       </div>
 
-
       {/* Amount */}
       <div className="flex items-center">
         <input
@@ -195,7 +202,7 @@ export const SortableItem: React.FC<SortableItemProps> = ({
       </div>
 
       {/* Remove Step */}
-      <button onClick={() => removeStep(index)}>
+      <button onClick={() => removeStep(index)} className="hidden md:block">
         <XMarkIcon className="h-6 w-6 text-red-600 hover:text-red-300" />
       </button>
     </div>
