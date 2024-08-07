@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { BookOpenIcon, ExclamationTriangleIcon, CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/router';
 import { useModal } from '@/context/ModalContext';
-import { DeleteBuildFromFirebase } from '@/pages/api/firebase/functions';
+import { DeleteBuildFromFirebase, reportContentToFirebase } from '@/pages/api/firebase/functions';
 import { TrashIcon } from '@heroicons/react/24/solid';
 
 /*const AdSenseDisplay = dynamic(() => import('@/components/tags/adsense'), {
@@ -21,6 +21,7 @@ const statusIcons = {
   warning: <ExclamationTriangleIcon className='text-yellow-600 h-8 w-8' aria-hidden="true" />,
   auth: <InformationCircleIcon className='text-violet-600 h-8 w-8' aria-hidden="true" />,
   delete: <TrashIcon className='text-red-500 h-8 w-8' aria-hidden="true" />,
+  report: <ExclamationTriangleIcon className='text-red-500 h-8 w-8' aria-hidden="true" />,
 };
 
 const borderColor = {
@@ -30,6 +31,7 @@ const borderColor = {
     warning: 'border-yellow-600/50',
     auth: 'border-violet-600/50',
     delete: 'border-red-500/50',
+    report: 'border-red-500/50',
 }
 
 
@@ -57,6 +59,13 @@ const GlobalModal: React.FC = () => {
                 return;
             }
         },
+        report: async () => {
+            
+            if(userId && buildId && slug) {
+                await reportContentToFirebase(slug, buildId, userId);
+            }
+            return;
+        }
     }
 
     const onButtonClick = () => {
@@ -64,6 +73,8 @@ const GlobalModal: React.FC = () => {
         if (status === 'delete') {
             modalAction.delete();
             router.push('/');
+        } else if (status === 'report') {
+            modalAction.report();
         } else {
             router.push(modalAction[status]);
         }

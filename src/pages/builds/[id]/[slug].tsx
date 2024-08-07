@@ -11,8 +11,10 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { BuildViewList } from "@/components/ui/buildview/list";
 import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useModal } from "@/context/ModalContext";
 import { classNames } from "@/components/shared/classNames";
+import { Notify } from "@/components/shared/notify";
 import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -131,6 +133,31 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
     }
   }
 
+  const handleReport = () => {
+    if (!user) {
+      openModal(
+        "Must Be Logged In", 
+        "Please login or create an account to report this build", 
+        "Login/Signup", 
+        "auth", 
+        false,
+        build.id,
+        slug,
+      )
+      return;
+    }
+    openModal(
+      "Report Build",
+      "Are you sure you want to report this build?",
+      "Report",
+      "report",
+      false,
+      build.id,
+      slug,
+      user.uid
+    );
+  };
+
   return (
     <>
       <Head>
@@ -150,7 +177,24 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
             <div className="inline-flex items-center gap-4">
               <h1 className="text-3xl font-bold">{build.buildName}</h1>
             </div>
-            <div className="flex justify-around space-x-4">
+            <div className="flex justify-start space-x-4">
+              {isOwner && (
+                <>
+                  <Button
+                    text="Edit"
+                    buttonType="button"
+                    size="small"
+                    onClick={() => router.push(`/builds/edit/${id}`)}
+                  />
+                  <Button
+                    text={"Delete"}
+                    buttonType="button"
+                    color="red"
+                    size="small"
+                    onClick={() => openModal("Delete Build", "Are you sure you want to delete this build?", "Delete", "delete", false, build.id, slug, user?.uid)}
+                  />
+                </>
+              )}
               <div className="flex items-center justify-center">
                 <button
                   onClick={handleLike}
@@ -160,23 +204,14 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
                   <span className="text-sm lg:text-base">{likes}</span>
                 </button>
               </div>
-              {isOwner && (
-                <>
-                <Button
-                  text="Edit"
-                  buttonType="button"
-                  size="small"
-                  onClick={() => router.push(`/builds/edit/${id}`)}
-                />
-                <Button
-                  text={"Delete"}
-                  buttonType="button"
-                  color="red"
-                  size="small"
-                  onClick={() => openModal("Delete Build", "Are you sure you want to delete this build?", "Delete", "delete", false, build.id, slug, user?.uid)}
-                />
-                </>
-              )}
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={handleReport}
+                  className="text-red-600  hover:text-red-800 flex items-center rounded-full transition-all duration-200 ease-in-out"
+                >
+                  <ExclamationCircleIcon className="h-8 w-8 lg:h-8 lg:w-8 rounded-full" />
+                </button>
+              </div>
             </div>
           </div>
           <p className="mb-3">{build.summary || "Hi there"}</p>
