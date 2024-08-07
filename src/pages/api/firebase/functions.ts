@@ -208,3 +208,20 @@ export async function DeleteBuildFromFirebase({userId, buildId}: DeleteBuildProp
         console.error("Error deleting build: ", error);
     }
 }
+
+interface Report {
+    slug: string;
+    buildId: string;
+    userId: string;
+  }
+
+export async function reportContentToFirebase(slug: string, buildId: string, userId: string): Promise<void> {
+    const report: Report = { slug, buildId, userId };
+  
+    try {
+      await addDoc(collection(db, 'reports'), report);
+      Notify('Report submitted successfully');
+    } catch (error) {
+      Notify('Problem submitting report, please try again.')
+    }
+  }
