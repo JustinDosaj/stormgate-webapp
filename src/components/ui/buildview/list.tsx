@@ -8,12 +8,12 @@ export function BuildViewList({build}: any) {
             >
                 {/* Timing */}
                 <div className="flex items-center space-x-2">
-                <span className="font-mono">{step.timing.value}</span>
-                <span className="text-xs text-gray-400">{step.timing.type}</span>
+                <span className="font-mono text-sm lg:text-base">{step.timing.value}</span>
+                <span className="text-xs lg:text-sm text-gray-400">{step.timing.type}</span>
                 </div>
 
                 {/* Action */}
-                <div className="flex-grow">
+                <div className="flex-grow text-xs lg:text-base">
                 {step.action.value ? (
                     <div className="space-x-1.5">
                         <span>{step.action.value}</span>
@@ -26,7 +26,7 @@ export function BuildViewList({build}: any) {
 
 
                 {/* Description */}
-                <div className="text-sm text-gray-400">
+                <div className="text-xs lg:text-sm text-gray-400">
                     {step.description || "No description provided"}
                 </div>
 

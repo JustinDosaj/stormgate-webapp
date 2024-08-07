@@ -28,7 +28,7 @@ export default function Profile() {
       <title>Stormgate Tactics | Your Profile</title>
       <meta name="robots" content="noindex" />
     </Head>
-    <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between p-24 space-y-24 ${inter.className}`}>
+    <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between py-24 space-y-24 ${inter.className}`}>
       <ProfileComponent />
       <BuildList title={"Your Build Orders"} userId={user?.uid}/>
     </main>

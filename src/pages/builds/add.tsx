@@ -182,10 +182,10 @@ export default function AddBuild() {
         <title>Stormgate Tactics | Add Build</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
+      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center py-24 text-white">
         <Container className="w-full max-w-4xl">
           <h1 className="text-3xl font-bold mb-8 text-white">Add New Build</h1>
-          <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
+          <div className="flex flex-col space-y-6 ">
             {/* Left Side: Build Information */}
             <AddBuildInfo
               buildName={buildName}
