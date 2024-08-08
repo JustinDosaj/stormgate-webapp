@@ -58,6 +58,7 @@ export default function ProfileComponent({className}: ProfileProps) {
                         value={newUsername}
                         disabled={!editing}
                         onChange={(e) => setNewUsername(e.target.value)}
+                        maxLength={15}
                         className="w-fit pl-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none"
                     />
                     <button onClick={handleUserNameChange}>
