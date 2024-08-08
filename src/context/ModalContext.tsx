@@ -1,7 +1,7 @@
 // context/ModalContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-type ModalStatus = 'info' | 'error' | 'success' | 'warning' | 'auth' | 'delete';
+type ModalStatus = 'info' | 'error' | 'success' | 'warning' | 'auth' | 'delete' | 'report';
 
 interface ModalContextProps {
   isOpen: boolean;
