@@ -91,11 +91,7 @@ const Post: React.FC = ({ post, url, recentPosts }: any) => {
                 <aside className="lg:w-1/3 lg:sticky lg:top-24">
                 <h2 className="text-2xl font-bold text-white mb-4">Recent Posts</h2>
                 {recentPosts.blogPost.map((post: any) => (
-                    <>
                     <RecentPostCard key={post.slug} post={post}/>
-                    <RecentPostCard key={post.slug} post={post}/>
-                    <RecentPostCard key={post.slug} post={post}/>
-                    </>
                 ))}
                 </aside>
             </Container>
