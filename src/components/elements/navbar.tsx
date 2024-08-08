@@ -11,16 +11,9 @@ const navItems = [
   { href: '/builds', label: 'Builds'},
 ];
 
-const buildNav = [
-  { href: '/builds/celestial-armada', label: 'Celestial Armada' },
-  { href: '/builds/human-vanguard', label: 'Human Vanguard' },
-  { href: '/builds/infernal-host', label: 'Infernal Host' },
-];
-
 export default function Navbar() {
   const { user, username } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isBuildsOpen, setIsBuildsOpen] = useState(false); // State to toggle Builds submenu in mobile
 
   return (
     <nav className="bg-gray-800 text-white p-4">
