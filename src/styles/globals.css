@@ -16,6 +16,15 @@
   }
 }
 
+.lg\:sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.lg\:top-24 {
+  top: 6rem;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

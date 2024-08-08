@@ -324,8 +324,8 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
               onClick={() => handlePageChange(index + 1)}
               className={`mx-1 px-3 py-1 rounded-md ${
                 currentPage === index + 1
-                  ? "bg-violet-700 text-white"
-                  : "bg-gray-800 text-gray-300 hover:bg-violet-700"
+                  ? "bg-violet-600 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-violet-600"
               }`}
             >
               {index + 1}
