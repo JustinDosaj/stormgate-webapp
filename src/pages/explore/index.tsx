@@ -25,11 +25,7 @@ const Explore: React.FC = ({ blogContent }: any) => {
         <h1 className="text-4xl font-bold text-white mb-8">News, Guides & More</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedBlogContent.map((post: any) => (
-            <>
             <PostCard key={post.slug} post={post}/>
-            <PostCard key={post.slug} post={post}/>
-            <PostCard key={post.slug} post={post}/>
-            </>
           ))}
 
         </div>
