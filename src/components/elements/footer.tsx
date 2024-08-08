@@ -5,8 +5,8 @@ const navigation = {
       { name: 'Home', href: '/' },
       { name: 'Builds', href: '/builds' },
       { name: 'News & Updates', href: '/news' },
-      { name: 'Privacy', href: '#' },
-      { name: 'Terms & Conditions', href: '#' },
+      { name: 'Privacy', href: '/policy/privacy' },
+      { name: 'Terms & Conditions', href: '/policy/terms' },
     ],
     social: [
       {
@@ -27,7 +27,7 @@ const navigation = {
 
     return (
       <footer className="bg-gray-800">
-        <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
+        <div className="mx-auto max-w-7xl overflow-hidden px-6 py-14 sm:py-12 lg:px-8 space-y-6">
           <nav aria-label="Footer" className="-mb-6 columns-2 sm:flex sm:justify-center sm:space-x-12">
             {navigation.main.map((item) => (
               <div key={item.name} className="pb-6">
@@ -37,7 +37,7 @@ const navigation = {
               </div>
             ))}
           </nav>
-          <div className="mt-10 flex justify-center space-x-10">
+          <div className="flex justify-center space-x-10">
             {navigation.social.map((item) => (
               <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
                 <span className="sr-only">{item.name}</span>
@@ -46,11 +46,11 @@ const navigation = {
             ))}
           </div>
 
-            <div className="mt-10 text-gray-400 text-sm flex justify-center">Contact us at 
+            <div className=" text-gray-400 text-sm flex justify-center">Contact us at 
               <span className="underline ml-1">stormgatetactics@gmail.com</span>
             </div>
       
-          <p className="mt-10 text-center text-xs leading-5 text-gray-500">
+          <p className="text-center text-xs leading-5 text-gray-500">
             &copy; {year} Vurge LLC, Inc. All rights reserved. Game content and assets are trademarks of Frost Giant Studios.
           </p>
         </div>

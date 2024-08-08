@@ -28,7 +28,7 @@ export default function AddBuildInfo({
     description, setDescription }: BuildInfo) {
 
     return(
-        <div className="bg-gray-800 p-6 rounded-lg w-full md:w-1/3">
+        <div className="bg-gray-800 p-6 rounded-lg w-full">
             <h2 className="text-xl font-semibold mb-4">General Build Information</h2>
             <div className="space-y-4">
               <div>

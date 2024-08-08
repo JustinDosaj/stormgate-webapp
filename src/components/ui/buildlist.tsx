@@ -1,15 +1,15 @@
 // components/BuildList.tsx
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Button } from '../shared/button';
-import { BellIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
-import { Container } from '../shared/container';
-import algoliasearch, { SearchIndex } from 'algoliasearch/lite';
-import { Build } from '@/constants/interfaces';
-import { useRouter } from 'next/router';
-import { GetAuthor } from '@/pages/api/firebase/functions';
-import SkeletonLoader from './skeletonloader';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { Button } from "../shared/button";
+import { BellIcon, HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { Container } from "../shared/container";
+import algoliasearch, { SearchIndex } from "algoliasearch/lite";
+import { Build } from "@/constants/interfaces";
+import { useRouter } from "next/router";
+import { GetAuthor } from "@/pages/api/firebase/functions";
+import SkeletonLoader from "./skeletonloader";
 
 // Algolia configuration
 
@@ -21,25 +21,29 @@ interface BuildListProps {
 }
 
 const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
-
   const [builds, setBuilds] = useState<Build[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [wait, setWait] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [filters, setFilters] = useState({
-    gameMode: '1v1', // Default to 1v1
-    faction: '', // Default to Any (empty string for no filter)
-    enemyFaction: '', // Default to Any (empty string for no filter)
-    userId: userId || '',
-    sortBy: 'likes', // Default to sorting by likes
+    gameMode: "1v1", // Default to 1v1
+    faction: "", // Default to Any (empty string for no filter)
+    enemyFaction: "", // Default to Any (empty string for no filter)
+    userId: userId || "",
+    sortBy: "likes", // Default to sorting by likes
   });
 
-  const searchClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APPLICATION_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY as string);
+  const searchClient = algoliasearch(
+    process.env.NEXT_PUBLIC_ALGOLIA_APPLICATION_ID as string,
+    process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_ONLY_KEY as string
+  );
   const index: SearchIndex = searchClient.initIndex(
-      filters.sortBy === "likes" ? process.env.NEXT_PUBLIC_ALGOLIA_VINDEX_LIKES as string
-    : filters.sortBy === "createdAt" ? process.env.NEXT_PUBLIC_ALGOLIA_VINDEX_CREATEDAT as string
-    : process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string
+    filters.sortBy === "likes"
+      ? (process.env.NEXT_PUBLIC_ALGOLIA_VINDEX_LIKES as string)
+      : filters.sortBy === "createdAt"
+      ? (process.env.NEXT_PUBLIC_ALGOLIA_VINDEX_CREATEDAT as string)
+      : (process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string)
   );
 
   const router = useRouter();
@@ -70,10 +74,10 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
       }
 
       // Convert filters to Algolia query string
-      const filtersString = filtersArray.join(' AND ');
+      const filtersString = filtersArray.join(" AND ");
 
       // Algolia search
-      const { hits, nbPages } = await index.search('', {
+      const { hits, nbPages } = await index.search("", {
         filters: `${filtersString}`,
         hitsPerPage: BUILDS_PER_PAGE,
         page: currentPage - 1,
@@ -86,7 +90,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
           const author = await GetAuthor(hit.owner.id); // Retrieve the author's name
           return {
             id: hit.objectID,
-            slug: hit.data.slug || 'temp-slug',
+            slug: hit.data.slug || "temp-slug",
             title: hit.buildName,
             faction: hit.faction,
             ownerId: hit.owner.id,
@@ -101,7 +105,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
       setBuilds(fetchedBuilds);
       setTotalPages(nbPages);
     } catch (error) {
-      console.error('Error fetching builds:', error);
+      console.error("Error fetching builds:", error);
     } finally {
       setLoading(false); // Set loading state to false after fetching
     }
@@ -135,20 +139,32 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
   };
 
   return (
-    <Container className="py-8 px-4 md:px-8 bg-gray-900 text-white w-full">
+    <Container className="px-4 md:px-8 bg-gray-900 text-white w-full min-h-screen">
       <div className="container mx-auto">
         {/* Title and Create Button */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold">{title}</h2>
-          <Button buttonType="button" text="Create Build Order" onClick={() => router.push('/builds/add')} />
+        <div className="flex flex-col lg:flex-row items-center justify-between mb-6 space-y-4 lg:space-y-0">
+          <h2 className="text-3xl text-center font-bold">{title}</h2>
+          <Button
+            buttonType="button"
+            text="Create Build Order"
+            className="hidden lg:block"
+            onClick={() => router.push("/builds/add")}
+          />
+          <Button
+            buttonType="button"
+            text="Create Build Order"
+            size="small"
+            className="lg:hidden block"
+            onClick={() => router.push("/builds/add")}
+          />
         </div>
 
         {/* Filter Options */}
-        <div className="flex justify-between items-center mb-4 border-b border-gray-700 pb-4">
+        <div className="flex flex-col lg:flex-row lg:flex-wrap justify-between items-center mb-4 border-b border-gray-700 pb-4 space-y-4 lg:space-y-0">
           {/* Left Filters */}
-          <div className="flex space-x-4 items-center">
-            <div className="flex items-center space-x-2">
-              <label htmlFor="gameMode" className="font-semibold">
+          <div className="flex flex-col lg:flex-row md:flex-wrap items-center lg:space-x-4 w-full md:w-auto space-y-4 lg:space-y-0">
+            <div className="flex items-center lg:space-x-2 ">
+              <label htmlFor="gameMode" className="hidden lg:block font-semibold">
                 Game Mode:
               </label>
               <select
@@ -162,8 +178,8 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
                 <option value="1v1">1v1</option>
               </select>
             </div>
-            <div className="flex items-center space-x-2">
-              <label htmlFor="faction" className="font-semibold">
+            <div className="flex items-center lg:space-x-2">
+              <label htmlFor="faction" className="hidden lg:block font-semibold">
                 You:
               </label>
               <select
@@ -180,9 +196,9 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
                 <option value="infernals">Infernal Host</option>
               </select>
             </div>
-            <span className="text-lg font-bold">vs</span>
-            <div className="flex items-center space-x-2">
-              <label htmlFor="enemyFaction" className="font-semibold">
+            <span className="text-base lg:text-lg font-bold">vs</span>
+            <div className="flex items-center lg:space-x-2">
+              <label htmlFor="enemyFaction" className="hidden lg:block font-semibold">
                 Opponent:
               </label>
               <select
@@ -202,14 +218,16 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
           </div>
 
           {/* Right Filters */}
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 ">
             <button
-              className={`font-semibold border-r border-gray-700 pr-2 ${
-                filters.sortBy === 'likes' ? 'text-violet-500' : 'hover:text-violet-50'
+              className={`font-semibold border-r border-gray-700 pr-4 ${
+                filters.sortBy === "likes"
+                  ? "text-violet-500"
+                  : "hover:text-violet-50"
               }`}
               onClick={() => {
                 setWait(true);
-                setFilters({ ...filters, sortBy: 'likes' });
+                setFilters({ ...filters, sortBy: "likes" });
                 handleApplyFilters();
               }}
               disabled={wait}
@@ -218,11 +236,13 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
             </button>
             <button
               className={`font-semibold ${
-                filters.sortBy === 'createdAt' ? 'text-violet-500' : 'hover:text-violet-500'
+                filters.sortBy === "createdAt"
+                  ? "text-violet-500"
+                  : "hover:text-violet-500"
               }`}
               onClick={() => {
                 setWait(true);
-                setFilters({ ...filters, sortBy: 'createdAt' });
+                setFilters({ ...filters, sortBy: "createdAt" });
                 handleApplyFilters();
               }}
               disabled={wait}
@@ -233,11 +253,12 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
         </div>
 
         {/* List Header */}
-        <div className="grid grid-cols-6 gap-4 bg-gray-800 rounded-t-md p-4 font-semibold text-gray-300 border-b border-gray-400">
+        <div className="grid grid-cols-4 lg:grid-cols-6 gap-4 bg-gray-800 rounded-t-md p-4 font-semibold text-gray-300 border-b border-gray-400 text-sm lg:text-base">
           <div className="col-span-2">Title</div>
-          <div>Faction</div>
-          <div>Against</div>
-          <div>Created</div>
+          <div className="block lg:hidden">Matchup</div>
+          <div className="hidden lg:block">Faction</div>
+          <div className="hidden lg:block">Against</div>
+          <div className="hidden lg:block">Created</div>
           <div>Rating</div>
         </div>
 
@@ -253,30 +274,41 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
               <Link
                 href={`/builds/${build.id}/${build.slug}`}
                 key={build.id}
-                className="grid grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center rounded-md hover:bg-gray-900 hover:cursor-pointer"
+                className="grid grid-cols-4 lg:grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center rounded-md hover:bg-gray-900 hover:cursor-pointer"
               >
                 {/* Title, Icon, and Author */}
                 <div className="col-span-2 flex items-center">
                   {/* Icon Placeholder */}
-                  <BellIcon className="h-8 w-8 text-gray-400" />
-                  <div className="ml-3">
-                    <div className="font-semibold capitalize">{build.title}</div>
-                    <div className="text-sm text-gray-400">by {build.author}</div>
+                  <div className="ml-1">
+                    <div className="text-sm lg:text-base font-semibold capitalize">
+                      {build.title}
+                    </div>
+                    <div className="text-xs lg:text-sm text-gray-400">
+                      by {build.author}
+                    </div>
                   </div>
                 </div>
 
                 {/* Faction */}
-                <div className="capitalize">{build.faction}</div>
+                <div className="capitalize hidden lg:block text-sm lg:text-base">
+                  {build.faction}
+                </div>
 
                 {/* Opponent Faction */}
-                <div className="capitalize">{build.enemyFaction}</div>
+                <div className="capitalize hidden lg:block text-sm lg:text-base">
+                  {build.enemyFaction}
+                </div>
+                
+                <div className="block lg:hidden capitalize text-sm lg:text-base">
+                  {build.faction} vs {build.enemyFaction}
+                </div>
 
                 {/* Build Created */}
-                <div>{build.dateCreated}</div>
+                <div className="hidden lg:block">{build.dateCreated}</div>
 
                 {/* Rating */}
-                <div className="flex items-center">
-                  <HandThumbUpIcon className="h-5 w-5 text-green-500 mr-1.5" />
+                <div className="flex items-center text-sm lg:text-base">
+                  <HandThumbUpIcon className="h-3.5 w-3.5 lg:h-5 lg:w-5 text-green-500 mr-1.5" />
                   {build.likes}
                 </div>
               </Link>
@@ -292,8 +324,8 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
               onClick={() => handlePageChange(index + 1)}
               className={`mx-1 px-3 py-1 rounded-md ${
                 currentPage === index + 1
-                  ? 'bg-violet-700 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-violet-700'
+                  ? "bg-violet-700 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-violet-700"
               }`}
             >
               {index + 1}

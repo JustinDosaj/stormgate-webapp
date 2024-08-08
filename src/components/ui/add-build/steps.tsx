@@ -23,17 +23,10 @@ interface StepProps {
 
 export default function Steps({sensors, handleDragEnd, steps, handleStepChange, removeStep, faction, addStep}: StepProps) {
     return (
-        <div className="bg-gray-800 p-6 rounded-lg w-full md:w-3/4">
+        <div className="bg-gray-800 p-6 rounded-lg w-full">
             <h2 className="text-xl font-semibold">Edit Build Order Steps</h2>
-            <p className="text-base mb-4">Edit build steps using time, resources, or supply as a tracking mechanism</p>
-            
-            {/* Column Headers */}
-            <div className="flex justify-start pl-16 mb-2 text-sm font-semibold text-gray-400">
-            <div className="text-center">Timing</div>
-            <div className="col-span-2 text-center pl-16">Unit/Building</div>
-            <div className="col-span-1 text-center pl-52">Amount</div>
-            </div>
-            
+            <p className="text-base mb-4">Edit build steps using time, resources, or supply as a tracking mechanism. Then select a build or action. Optionally, you can add a description for the step and an amount if multi units need to be created</p>
+                    
             <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

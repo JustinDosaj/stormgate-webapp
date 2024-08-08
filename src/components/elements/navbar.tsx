@@ -3,11 +3,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { UserCircleIcon, XMarkIcon, Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 const navItems = [
-  { href: '/', label: 'Home', isDropDown: false },
-  { href: '/news', label: 'News', isDropDown: false },
-  { href: '/builds', label: 'Builds', isDropDown: true },
+  { href: '/', label: 'Home' },
+  { href: '/news', label: 'News' },
+  { href: '/builds', label: 'Builds'},
 ];
 
 const buildNav = [
@@ -17,7 +18,7 @@ const buildNav = [
 ];
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const { user, username } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBuildsOpen, setIsBuildsOpen] = useState(false); // State to toggle Builds submenu in mobile
 
@@ -25,36 +26,22 @@ export default function Navbar() {
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <div className="flex items-center space-x-2">
-          {/* LOGO PLACEHOLDER */}
-          <UserCircleIcon className="h-10 w-10" />
-        </div>
+        <Link href="/">
+          <div className="flex items-center space-x-2">
+            <img src="/images/logos/sg-logo-250x50.png" alt="Stormgate Tactics Logo" className="h-10 w-auto" />
+          </div>
+        </Link>
 
         {/* Desktop Navigation Links Centered */}
         <ul className="hidden md:flex space-x-12 justify-center absolute left-1/2 transform -translate-x-1/2">
           {navItems.map((item) => (
             <li
               key={item.href}
-              className={item.isDropDown ? 'relative group' : ''}
+              className={ ''}
             >
               <Link href={item.href} className={`hover:text-gray-400`}>
                 {item.label}
               </Link>
-              {item.isDropDown && (
-                <div className="absolute opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-opacity duration-200 ease-in-out w-max">
-                  <div className="left-0 mt-2 bg-gray-900 rounded-md">
-                    {buildNav.map((build) => (
-                      <Link
-                        key={build.href}
-                        href={build.href}
-                        className="block px-4 py-2 hover:bg-gray-600 rounded-md"
-                      >
-                        {build.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
             </li>
           ))}
         </ul>
@@ -62,7 +49,7 @@ export default function Navbar() {
         {/* Desktop User Profile Section */}
         <div className="items-center hidden md:flex space-x-1">
           {user ? (
-            <span>{user.email}</span>
+            <span>{username}</span>
           ) : (
             <>
               <span>Not logged in | </span>
@@ -96,48 +83,10 @@ export default function Navbar() {
           <ul className="space-y-4">
             {navItems.map((item) => (
               <li key={item.href} className="flex flex-col">
-                {!item.isDropDown ? (
-                  <Link href={item.href} className="hover:text-gray-400">
+                  <Link href={item.href} className="hover:text-gray-400" onClick={() => setIsMenuOpen(false)}>
                     {item.label}
                   </Link>
-                ) : (
-                  <button
-                    onClick={() => setIsBuildsOpen(!isBuildsOpen)}
-                    className="hover:text-gray-400 focus:outline-none flex justify-between items-center"
-                  >
-                    {item.label}
-                    <svg
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        isBuildsOpen ? 'rotate-180' : ''
-                      }`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </button>
-                )}
-
-                {item.isDropDown && isBuildsOpen && (
-                  <div className="pl-4 mt-2 space-y-2">
-                    {buildNav.map((build) => (
-                      <Link
-                        key={build.href}
-                        href={build.href}
-                        className="block px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600"
-                      >
-                        {build.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                
               </li>
             ))}
             {/* Mobile User Profile Section */}
@@ -145,7 +94,7 @@ export default function Navbar() {
               <UserCircleIcon className="h-8 w-8 text-gray-300" />
               {user ? (
                 <>
-                  <span>{user.email}</span>
+                  <span>{username}</span>
                 </>
               ) : (
                 <>
