@@ -5,9 +5,11 @@ import { renderContentBlock } from "@/components/ui/explore/render";
 import { Container } from '@/components/shared/container';
 import { getEntriesForContentTypes } from "@/lib/contentful";
 import { RecentPostCard } from "@/components/ui/explore/recentPostCard";
-import { BLOCKS, MARKS } from '@contentful/rich-text-types';
 import Head from "next/head";
 import { StickyAd } from "@/components/ads/sticky";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import React from "react";
+import { extractTextFromRichText } from "@/components/ui/explore/render";
 import AdSense from "@/components/ads/adsense";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -38,13 +40,69 @@ export const getServerSideProps: GetServerSideProps = async ( context) => {
 const Post: React.FC = ({ post, url, recentPosts }: any) => {
   
     const { title, image, author, contentBlocks, category, ogDescription, seoDescription, seoTitle, slug, summary, logo } = post.fields;
-    const { createdAt } = post.sys 
+    const { createdAt, updatedAt } = post.sys 
 
     const imageUrl = image.fields.file.url;
     const absoluteImageUrl = imageUrl.startsWith('//') ? `https:${imageUrl}` : imageUrl;
     
     const logoUrl = logo.fields.file.url;
     const absoluteLogoUrl = logoUrl.startsWith('//') ? `https:${logoUrl}` : logoUrl; // This is used to schema if there is one
+
+    const textBlocks = contentBlocks
+        .filter((block: any) => block.fields.blockType === "text")
+        .map((block: any) => extractTextFromRichText(block.fields.textContent));
+
+    // Join all text blocks to form the articleBody
+    const articleBody = textBlocks.join("\n\n");
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": `${title}`,
+        "image": `${absoluteImageUrl}`,
+        "author": {
+          "@type": "Person",
+          "name": "SGT Team"
+        },
+        "datePublished": `${createdAt}`,
+        "articleBody": `${articleBody}`,
+        "description": `${summary}`,
+        "publisher": {
+          "@type": "Organization",
+          "name": "Stormgate Tactics",
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${absoluteLogoUrl}`
+          }
+        },
+        "url": `https://www.stormgatetactics.com/post/${slug}`,
+        "mainEntityOfPage": `https://www.stormgatetactics.com/post/${slug}`,
+    }
+
+    const jdsonLd2 = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": `${title}`,
+    "image": `${absoluteImageUrl}`,
+    "datePublished": `${createdAt}`,
+    "dateModified": `${updatedAt}`,
+    "author": {
+        "@type": "Person",
+        "name": "SGT Team"
+    },
+    "articleBody": `${articleBody}`,
+    "description": `${summary}`,
+    "publisher": {
+        "@type": "Organization",
+        "name": `Stormgate Tactics`,
+        "logo": {
+        "@type": "ImageObject",
+        "url": `${absoluteLogoUrl}`
+        }
+    },
+    "url": `https://www.stormgatetactics.com/post/${slug}`,
+    "mainEntityOfPage": `https://www.stormgatetactics.com/post/${slug}`
+    }
 
     return (
         <>
@@ -59,15 +117,12 @@ const Post: React.FC = ({ post, url, recentPosts }: any) => {
           <meta property="twitter:image" content={absoluteImageUrl}/>
           <meta property="twitter:title" content={seoTitle}/>
           <meta property="twitter:description" content={seoDescription}/>
-          {/*<script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          />*/}
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         </Head>
         <main className={`bg-gray-900 flex flex-col items-center justify-between space-y-12 min-h-screen py-24 ${inter.className}`}>
             <div className="w-full flex justify-center">
                 <StickyAd adSlot="123456789"/>
-                <div className="max-w-5xl flex-grow 2xl:mx-28">
+                <div className="max-w-5xl 2xl:mx-28">
                     <Container className="flex flex-col lg:flex-row justify-between items-start gap-8">
                         <div className="lg:w-2/3 text-white">
                             <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
