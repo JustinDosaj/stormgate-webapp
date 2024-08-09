@@ -29,7 +29,7 @@ import Head from 'next/head';
 export default function EditBuild() {
 
   const [buildName, setBuildName] = useState('');
-  const [summary, setSummary] = useState('');
+  const [info, setInfo] = useState('');
   const [gameMode, setGameMode] = useState('1v1');
   const [faction, setFaction] = useState('vanguard');
   const [enemyFaction, setEnemyFaction] = useState('any');
@@ -61,13 +61,14 @@ export default function EditBuild() {
             if (buildData.owner.id !== user?.uid) {router.push('/')}
 
             setBuildName(buildData.buildName || '');
-            setSummary(buildData.summary || '');
+            setDescription(buildData.description || '');
+            setInfo(buildData.desc || '');
             setGameMode(buildData.gameMode || '1v1');
             setFaction(buildData.faction || 'vanguard');
             setEnemyFaction(buildData.enemyFaction || 'any');
             setYoutubeLink(buildData.youtubeLink || '');
             setTwitchLink(buildData.twitchLink || '');
-            setDescription(buildData.description || '');
+            setInfo(buildData.info || '');
             setSteps(buildData.steps || []);
             setCreatedAt(buildData.data.createdAt);
             const date = new Date().toISOString();
@@ -89,6 +90,11 @@ export default function EditBuild() {
 
     if (buildName === '' || !buildName) {
       Notify('Build name is required')
+      setLoading(false)
+    }
+
+    if (description === '' || !description) {
+      Notify('Description is required')
       setLoading(false)
     }
 
@@ -118,7 +124,7 @@ export default function EditBuild() {
     try {
 
         const slug = await generateSlug(buildName || '');
-        const build = { id, buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps, data: { slug, createdAt, updatedAt } };
+        const build = { id, buildName, info, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps, data: { slug, createdAt, updatedAt } };
         const temp = await UpdateBuildInFirebase({build, user})
 
         router.push(`/builds/${id}/${slug}`); // Redirect to the updated build page
@@ -200,8 +206,8 @@ export default function EditBuild() {
             <AddBuildInfo
               buildName={buildName}
               setBuildName={setBuildName}
-              summary={summary}
-              setSummary={setSummary}
+              info={info}
+              setInfo={setInfo}
               gameMode={gameMode}
               setGameMode={setGameMode}
               faction={faction}

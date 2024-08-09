@@ -16,7 +16,7 @@ interface AddBuildProps {
 
 export async function AddBuildToFirebase({build, user}: AddBuildProps) {
 
-    const { buildName, enemyFaction, faction, gameMode, steps, summary, twitchLink, youtubeLink, description } = build
+    const { buildName, enemyFaction, faction, gameMode, steps, info, twitchLink, youtubeLink, description } = build
     const { uid } = user
 
     const userDocRef = doc(db, 'users', uid)
@@ -26,14 +26,14 @@ export async function AddBuildToFirebase({build, user}: AddBuildProps) {
 
     const fullBuild = {
         buildName,
-        summary,
+        description,
         enemyFaction,
         faction,
         gameMode,
         steps,
         twitchLink,
         youtubeLink,
-        description,
+        info,
         data: {
             slug,
             createdAt: date,
