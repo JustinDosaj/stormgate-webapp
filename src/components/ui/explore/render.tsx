@@ -1,6 +1,7 @@
 //import AdSenseDisplay from '@/components/tags/adsense';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, Block, Inline } from '@contentful/rich-text-types';
+import AdSense from '@/components/ads/adsense';
 import Image from "next/image"
 
 export const renderOptions = {
@@ -42,16 +43,14 @@ export const renderContentBlock = (block: any) => {
         return <iframe src={block.fields.videoUrl} frameBorder="0" className="w-full h-64 md:h-96 my-4"></iframe>;
       case 'code snippet':
         return <pre className="bg-gray-100 p-4 rounded my-4">{block.fields.codeSnippet}</pre>;
-      /*case 'Advertisement': 
-        return <div className="lg:hidden py-4">
-                  <AdSenseDisplay 
+      case 'ad': 
+        return <div className="py-4">
+                  <AdSense
                     adSlot="7423668524" 
-                    adFormat="square" 
-                    widthRes="false" 
-                    role={role} 
-                    maxHeight='320px'
+                    adFormat="auto"
+                    adStyle={{ width: '100%', height: '90px' }} 
                   />
-                </div>*/
+                </div>
       default:
         return null;
     }
