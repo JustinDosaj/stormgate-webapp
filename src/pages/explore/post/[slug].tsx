@@ -103,12 +103,12 @@ const Post: React.FC = ({ post, url, recentPosts }: any) => {
                 </div>
                 <StickyAd adSlot="123456789"/>
             </div>
-            <AdSense 
+            {/*<AdSense 
                 adSlot="7423668524" 
                 adFormat="auto"
                 className="max-w-5xl"
                 adStyle={{ width: '100%', height: '300px' }}
-            />
+            />*/}
         </main>
         </>
     );
