@@ -253,7 +253,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
         </div>
 
         {/* List Header */}
-        <div className="grid grid-cols-4 lg:grid-cols-6 gap-4 bg-gray-800 rounded-t-md p-4 font-semibold text-gray-300 border-b border-gray-400 text-sm lg:text-base">
+        <div className="grid grid-cols-4 lg:grid-cols-6 gap-4 bg-gray-800 rounded-t-md p-4 font-semibold text-gray-300 border-b border-gray-400 text-sm lg:text-base space-x-3">
           <div className="col-span-2">Title</div>
           <div className="block lg:hidden">Matchup</div>
           <div className="hidden lg:block">Faction</div>
@@ -274,7 +274,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
               <Link
                 href={`/builds/${build.id}/${build.slug}`}
                 key={build.id}
-                className="grid grid-cols-4 lg:grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center rounded-md hover:bg-gray-900 hover:cursor-pointer"
+                className="grid grid-cols-4 lg:grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center rounded-md hover:bg-gray-900 hover:cursor-pointer space-x-3"
               >
                 {/* Title, Icon, and Author */}
                 <div className="col-span-2 flex items-center">
