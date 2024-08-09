@@ -52,13 +52,13 @@ const initialSteps: BuildStep[] = [
 export default function AddBuild() {
 
   const [buildName, setBuildName] = useState('');
-  const [summary, setSummary] = useState('');
   const [gameMode, setGameMode] = useState('1v1');
   const [faction, setFaction] = useState('vanguard'); // Changed to lowercase for matching
   const [enemyFaction, setEnemyFaction] = useState('any');
   const [youtubeLink, setYoutubeLink] = useState('');
   const [twitchLink, setTwitchLink] = useState('');
   const [description, setDescription] = useState('');
+  const [info, setInfo] = useState('');
   const [steps, setSteps] = useState<BuildStep[]>(initialSteps);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -74,6 +74,12 @@ export default function AddBuild() {
       setLoading(false)
       return;
     }
+
+    if (description === '' || !description) {
+      Notify('Description is required')
+      setLoading(false)
+    }
+
 
     if (youtubeLink !== '') {
       if(!youtubeLink.includes('youtube.com')){
@@ -98,7 +104,7 @@ export default function AddBuild() {
     }
   
     try {
-      const build = { buildName, summary, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps };
+      const build = { buildName, info, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps };
 
       const routerPath = await AddBuildToFirebase({ build, user });
     
@@ -106,7 +112,7 @@ export default function AddBuild() {
       router.push(`/builds/${routerPath.id}/${routerPath.slug}`)
       // Reset form
       setBuildName('');
-      setSummary('');
+      setInfo('')
       setGameMode('1v1');
       setFaction('vanguard');
       setEnemyFaction('any');
@@ -190,8 +196,8 @@ export default function AddBuild() {
             <AddBuildInfo
               buildName={buildName}
               setBuildName={setBuildName}
-              summary={summary}
-              setSummary={setSummary}
+              info={info}
+              setInfo={setInfo}
               gameMode={gameMode}
               setGameMode={setGameMode}
               faction={faction}
