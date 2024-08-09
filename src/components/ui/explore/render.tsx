@@ -54,4 +54,23 @@ export const renderContentBlock = (block: any) => {
       default:
         return null;
     }
-  };
+};
+
+export const extractTextFromRichText = (richText: any): string => {
+  if (!richText) return '';
+
+  return richText.content
+    .map((node: any) => {
+      if (node.nodeType === 'text') {
+        return node.value;
+      }
+
+      if (node.nodeType === BLOCKS.PARAGRAPH || node.nodeType === BLOCKS.HEADING_1 || node.nodeType === BLOCKS.HEADING_2) {
+        return extractTextFromRichText(node);
+      }
+
+      return '';
+    })
+    .join(' ')
+    .trim();
+};

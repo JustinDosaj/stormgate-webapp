@@ -85,7 +85,30 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
   const [ isOwner, setIsOwner ] = useState<boolean>(false)
   const [likes, setLikes] = useState<number>(build?.data.likes || 0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
-  const { buildName, data, description, enemyFaction, faction, gameMode, owner, steps, summary, twitchLink, youtubeLink } = build;
+  const { buildName, data, description, enemyFaction, faction, gameMode, owner, steps, info, twitchLink, youtubeLink } = build;
+
+  let formattedSteps = steps.map((step: any)=> {
+    return `${step.id.charAt(0).toUpperCase() + step.id.slice(1)}: Build ${step.action.value} at ${step.timing.value} ${step.timing.type == "time" ? "minutes" : step.timing.type}`;
+  }).join("\n");  
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": `${buildName}`,
+    "description": `${description}`,
+    "text": `${formattedSteps}`,
+    "datePublished": `${data.createdAt}`,
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": `${likes}`,
+      "bestRating": "1",
+      "ratingCount": `${likes}`
+    },
+    "author": {
+      "@type": "Person",
+      "name": `${username}`
+    }
+  }
 
 
   useEffect(() => {
@@ -164,12 +187,13 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
       <Head>
         <title>{`Stormgate Tactics | ${buildName}`}</title>
         <meta name="title" content={`Stormgate Tactics | ${buildName}`}/>
-        <meta name="description" content={`${summary !== '' ? summary : `Stormgate build order for ${faction} versus ${enemyFaction}`}`}/>
+        <meta name="description" content={`${description !== '' ? description : `Stormgate build order for ${faction} versus ${enemyFaction}`}`}/>
         <meta property="og:title" content={`Stormgate Tactics | ${buildName}`} />
-        <meta property="og:description" content={`${summary !== '' ? summary : `Stormgate build order for ${faction} versus ${enemyFaction}`}`}/>
+        <meta property="og:description" content={`${description !== '' ? description : `Stormgate build order for ${faction} versus ${enemyFaction}`}`}/>
         <meta property="og:url" content={ogUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Stormgate Tactics" />
+        <meta property="og:site_name" content="Stormgate Tactics"/>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </Head>
       <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between space-y-12 py-24 ${inter.className}`}>
         <div className="w-full flex justify-center">
@@ -218,7 +242,7 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
                   </div>
                 </div>
               </div>
-              <p className="mb-3">{build.summary || "Hi there"}</p>
+              <p className="mb-3">{build.description}</p>
               <div className="border-b gray-300 w-full my-3"/>
               <div className="flex justify-between mb-4 text-sm lg:text-base">
                 <span className="capitalize">Faction: {build.faction}</span>
@@ -255,10 +279,10 @@ const Build: React.FC<{ build: any; id: string; slug: string, username: string, 
                   Watch on Twitch
                 </a>
               </div>
-              { build.description !== "" && (
+              { build.info !== "" && (
                 <div className="mb-8 text-sm lg:text-base">
                   <p className="font-semibold">Additional Information:</p>
-                  <p>{build.description}</p>
+                  <p>{build.info}</p>
                 </div>
               )
               }

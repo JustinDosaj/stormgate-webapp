@@ -1,8 +1,8 @@
 interface BuildInfo {
     buildName: string;
     setBuildName: (value: string) => void;
-    summary: string;
-    setSummary: (value: string) => void;
+    info: string;
+    setInfo: (value: string) => void;
     gameMode: string;
     setGameMode: (value: string) => void;
     faction: string;
@@ -19,7 +19,7 @@ interface BuildInfo {
 
 export default function AddBuildInfo({
     buildName, setBuildName, 
-    summary, setSummary, 
+    info, setInfo, 
     gameMode, setGameMode, 
     faction, setFaction, 
     enemyFaction, setEnemyFaction, 
@@ -32,7 +32,7 @@ export default function AddBuildInfo({
             <h2 className="text-xl font-semibold mb-4">General Build Information</h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="buildName" className="block font-semibold mb-2">Build Name (max 50 chars):</label>
+                <label htmlFor="buildName" className="block font-semibold mb-2">Build Name (max 65 chars):</label>
                 <input
                   type="text"
                   id="buildName"
@@ -43,14 +43,14 @@ export default function AddBuildInfo({
                 />
               </div>
               <div>
-                <label htmlFor="summary" className="block font-semibold mb-2">Summary (max 165 chars):</label>
+                <label htmlFor="description" className="block font-semibold mb-2">Description (max 250 chars):</label>
                 <input
                   type="text"
-                  id="summary"
-                  maxLength={165}
+                  id="description"
+                  maxLength={250}
                   className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={summary}
-                  onChange={(e) => setSummary(e.target.value)}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div>
@@ -92,7 +92,7 @@ export default function AddBuildInfo({
                 </select>
               </div>
               <div>
-                <label htmlFor="youtubeLink" className="block font-semibold mb-2">YouTube Link:</label>
+                <label htmlFor="youtubeLink" className="block font-semibold mb-2">YouTube Link (Optional):</label>
                 <input
                   type="text"
                   id="youtubeLink"
@@ -102,7 +102,7 @@ export default function AddBuildInfo({
                 />
               </div>
               <div>
-                <label htmlFor="twitchLink" className="block font-semibold mb-2">Twitch Link:</label>
+                <label htmlFor="twitchLink" className="block font-semibold mb-2">Twitch Link (Optional):</label>
                 <input
                   type="text"
                   id="twitchLink"
@@ -116,8 +116,8 @@ export default function AddBuildInfo({
                 <textarea
                   id="additionalInfo"
                   className="w-full p-2 bg-gray-700 text-white rounded-md"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={info}
+                  onChange={(e) => setInfo(e.target.value)}
                 />
               </div>
             </div>
