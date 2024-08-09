@@ -7,6 +7,8 @@ import { getEntriesForContentTypes } from "@/lib/contentful";
 import { RecentPostCard } from "@/components/ui/explore/recentPostCard";
 import { BLOCKS, MARKS } from '@contentful/rich-text-types';
 import Head from "next/head";
+import { StickyAd } from "@/components/ads/sticky";
+import AdSense from "@/components/ads/adsense";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -62,39 +64,51 @@ const Post: React.FC = ({ post, url, recentPosts }: any) => {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />*/}
         </Head>
-        <main className={`bg-gray-900 flex min-h-screen py-24 ${inter.className}`}>
-            <Container className="flex flex-col lg:flex-row justify-between items-start gap-8">
-                <div className="lg:w-2/3 text-white">
-                    <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
-                    <div className="text-gray-500 text-sm mb-4">
-                        {new Date(createdAt).toLocaleDateString()} by {author}
-                    </div>
-                    <div className="mb-8">
-                        <p>{summary}</p>
-                    </div>
-                    {image && (
-                        <img
-                        src={image.fields.file.url}
-                        alt={title}
-                        className="mb-8 rounded-lg w-full object-scale-down border"
-                        />
-                    )}
-                    <div className="text-white space-y-4">
-                        {contentBlocks.map((block: any) =>
-                            <div key={block.sys.id}>
-                                {renderContentBlock(block)}
+        <main className={`bg-gray-900 flex flex-col items-center justify-between space-y-12 min-h-screen py-24 ${inter.className}`}>
+            <div className="w-full flex justify-center">
+                <StickyAd adSlot="123456789"/>
+                <div className="max-w-5xl flex-grow 2xl:mx-28">
+                    <Container className="flex flex-col lg:flex-row justify-between items-start gap-8">
+                        <div className="lg:w-2/3 text-white">
+                            <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
+                            <div className="text-gray-500 text-sm mb-4">
+                                {new Date(createdAt).toLocaleDateString()} by {author}
                             </div>
-                        )}
-                    </div>
-                </div>
+                            <div className="mb-8">
+                                <p>{summary}</p>
+                            </div>
+                            {image && (
+                                <img
+                                src={image.fields.file.url}
+                                alt={title}
+                                className="mb-8 rounded-lg w-full object-scale-down border"
+                                />
+                            )}
+                            <div className="text-white space-y-4">
+                                {contentBlocks.map((block: any) =>
+                                    <div key={block.sys.id}>
+                                        {renderContentBlock(block)}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
 
-                <aside className="lg:w-1/3 lg:sticky lg:top-24">
-                <h2 className="text-2xl font-bold text-white mb-4">Recent Posts</h2>
-                {recentPosts.blogPost.map((post: any) => (
-                    <RecentPostCard key={post.slug} post={post}/>
-                ))}
-                </aside>
-            </Container>
+                        <aside className="lg:w-1/3 lg:sticky lg:top-24">
+                        <h2 className="text-2xl font-bold text-white mb-4">Recent Posts</h2>
+                        {recentPosts.blogPost.map((post: any) => (
+                            <RecentPostCard key={post.slug} post={post}/>
+                        ))}
+                        </aside>
+                    </Container>
+                </div>
+                <StickyAd adSlot="123456789"/>
+            </div>
+            <AdSense 
+                adSlot="7423668524" 
+                adFormat="auto"
+                className="max-w-5xl"
+                adStyle={{ width: '100%', height: '300px' }}
+            />
         </main>
         </>
     );
