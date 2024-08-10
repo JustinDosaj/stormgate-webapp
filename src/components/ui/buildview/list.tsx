@@ -25,14 +25,18 @@ export function BuildViewList({build}: any) {
                             <span className="">{step.amount == 0 ? '' : `x${step.amount}`}</span>
                         </div>
                     ) : (
-                        <span className="text-gray-400 text-sm"></span>
+                        <span className="text-gray-400 text-xs lg:text-sm">- - -</span>
                     )}
                     </div>
 
-
+                        
                     {/* Description */}
-                    <div className="lg:col-span-7 text-xs lg:text-sm text-gray-300">
-                        {step.description || ""}
+                    <div className="lg:col-span-7 text-xs lg:text-sm text-gray-200">
+                        {step.description ? (
+                        <span>{step.description}</span>
+                        ) : (
+                        <span className="text-gray-400">- - -</span>
+                        )}
                     </div>
 
 
