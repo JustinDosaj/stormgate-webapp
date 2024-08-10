@@ -36,9 +36,9 @@ export default function ProfileComponent({className}: ProfileProps) {
     <Container className={` bg-gray-900 text-white ${className}`}>
         <div className="mx-auto">
             {/* Title */}
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-3xl font-bold">{"Account Details"}</h2>
-            </div>
+            
+                <h2 className="text-center lg:text-left text-3xl lg:text-4xl font-semibold text-white mb-6">{"Account Details"}</h2>
+            
             <div className="grid lg:flex justify-center lg:justify-between space-y-4 lg:space-y-0 bg-gray-800 rounded-md p-4 items-center">
                 <div className="">
                     <label className="hidden lg:inline-flex lg:mr-1 text-gray-400">Email: </label>

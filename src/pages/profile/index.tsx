@@ -30,7 +30,7 @@ export default function Profile() {
     </Head>
     <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between py-24 space-y-24 ${inter.className}`}>
       <ProfileComponent />
-      <BuildList title={"Your Build Orders"} userId={user?.uid}/>
+      <BuildList title={"Your Build Orders"} userId={user?.uid} className="min-h-screen"/>
     </main>
     </>
   );
