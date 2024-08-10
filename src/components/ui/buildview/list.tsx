@@ -25,14 +25,14 @@ export function BuildViewList({build}: any) {
                             <span className="">{step.amount == 0 ? '' : `x${step.amount}`}</span>
                         </div>
                     ) : (
-                        <span className="text-gray-400 text-sm">No action specified</span>
+                        <span className="text-gray-400 text-sm"></span>
                     )}
                     </div>
 
 
                     {/* Description */}
                     <div className="lg:col-span-7 text-xs lg:text-sm text-gray-300">
-                        {step.description || "No description provided"}
+                        {step.description || ""}
                     </div>
 
 

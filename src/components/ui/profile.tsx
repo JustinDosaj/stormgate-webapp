@@ -20,8 +20,11 @@ export default function ProfileComponent({className}: ProfileProps) {
 
         if(editing && user) {
             // Code to update username
-            await UpdateUsername({user, newUsername})
-            setEditing(!editing)
+            const wasUpdated = await UpdateUsername({user, newUsername})
+
+            if(wasUpdated) {
+                setEditing(!editing)
+            }
             
         } else {
             setEditing(!editing)
