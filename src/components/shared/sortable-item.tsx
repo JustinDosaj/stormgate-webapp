@@ -43,12 +43,6 @@ export const SortableItem: React.FC<SortableItemProps> = ({
         return '00:00';
       case 'supply':
         return '9';
-      case 'luminite':
-      case 'therium':
-      case 'energy':
-      case 'power':
-      case 'animus':
-        return '0-9999';
       case 'none':
         return '';
       default:
