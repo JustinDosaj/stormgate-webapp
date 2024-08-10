@@ -128,7 +128,17 @@ export async function CheckForDuplicateUserName() {
 export async function UpdateUsername({user, newUsername, username}: AddBuildProps) {
 
     if (newUsername === username) { 
-        return; 
+        return false; 
+    }
+
+    const usersRef = collection(db, 'users');
+    const q = query(usersRef, where('username', '==', newUsername));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+        // Username already exists
+        Notify('Username is already taken. Please choose another one.');
+        return false;
     }
     
     const userDocRef = doc(db, 'users', user.uid)
@@ -139,7 +149,7 @@ export async function UpdateUsername({user, newUsername, username}: AddBuildProp
         Notify("Username updated successfully")
     })
 
-    return;
+    return true;
 }
 
 export async function GetAuthor(userId: string) {
