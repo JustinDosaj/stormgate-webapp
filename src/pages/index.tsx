@@ -5,11 +5,25 @@ import Head from "next/head";
 import BuildList from "@/components/ui/buildlist";
 import AdSense from "@/components/ads/adsense";
 import { StickyAd } from "@/components/ads/sticky";
+import { GetServerSideProps } from "next";
+import { getEntriesForContentTypes } from "@/lib/contentful";
+import { ExploreList } from "@/components/ui/explore/explore-list";
 
 // Define your font
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export const getServerSideProps: GetServerSideProps = async () => {
+
+  const entries = await getEntriesForContentTypes(['blogPost'])
+
+  const blogContent = entries.blogPost
+
+  return {
+    props: { blogContent },
+  };
+};
+
+export default function Home({blogContent}: any) {
   
   return (
     <>
@@ -26,9 +40,10 @@ export default function Home() {
     <main className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between py-24 space-y-12 ${inter.className}`}>
       <div className="w-full flex justify-center">
           <StickyAd adSlot="123456789"/>
-          <div className="max-w-5xl flex-grow 2xl:mx-28">
+          <div className="max-w-5xl flex-grow 2xl:mx-28 space-y-16">
             <Hero />
-            <BuildList title={"Stormgate Build Orders"} />
+            <BuildList title={"Build Orders"} />
+            <ExploreList blogContent={blogContent}/>
           </div>
           <StickyAd adSlot="123456789"/>
       </div>

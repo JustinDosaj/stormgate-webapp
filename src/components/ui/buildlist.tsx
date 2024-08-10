@@ -18,9 +18,10 @@ const BUILDS_PER_PAGE = 10;
 interface BuildListProps {
   title: string;
   userId?: string;
+  className?: string;
 }
 
-const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
+const BuildList: React.FC<BuildListProps> = ({ title, userId, className }) => {
   const [builds, setBuilds] = useState<Build[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -139,11 +140,11 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId }) => {
   };
 
   return (
-    <Container className="px-4 md:px-8 bg-gray-900 text-white w-full min-h-screen">
+    <Container className={`px-4 md:px-8 bg-gray-900 text-white w-full ${className}`}>
       <div className="container mx-auto">
         {/* Title and Create Button */}
         <div className="flex flex-col lg:flex-row items-center justify-between mb-6 space-y-4 lg:space-y-0">
-          <h2 className="text-3xl text-center font-bold">{title}</h2>
+          <h2 className="text-center lg:text-left text-3xl lg:text-4xl font-semibold text-white">{title}</h2>
           <Button
             buttonType="button"
             text="Create Build Order"
