@@ -1,9 +1,9 @@
-import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, runTransaction, where, query, getDocs, getDoc, increment, arrayRemove, deleteDoc } from 'firebase/firestore';
+import { doc, setDoc, arrayUnion, addDoc, collection, updateDoc, where, query, getDocs, getDoc, increment, arrayRemove, deleteDoc } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { db } from '@/lib/firebase';
-import { generateSlug } from '@/utils/generateSlug';
 import { generateRandomUsername } from '@/utils/generateUsernames';
 import { Notify } from '@/components/shared/notify';
+import { httpsCallable, getFunctions } from 'firebase/functions';
 
 interface AddBuildProps {
     build?: any;
@@ -14,95 +14,69 @@ interface AddBuildProps {
     id?: string;
 }
 
-export async function AddBuildToFirebase({build, user}: AddBuildProps) {
+export async function AddBuildToFirebase({build}: AddBuildProps) {
 
-    const { buildName, enemyFaction, faction, gameMode, steps, info, twitchLink, youtubeLink, description } = build
-    const { uid } = user
-
-    const userDocRef = doc(db, 'users', uid)
-    const buildsCollectionRef = collection(db, 'builds')
-    const date = new Date().getTime()
-    const slug = await generateSlug(buildName)
-
-    const fullBuild = {
-        buildName,
-        description,
-        enemyFaction,
-        faction,
-        gameMode,
-        steps,
-        twitchLink,
-        youtubeLink,
-        info,
-        data: {
-            slug,
-            createdAt: date,
-            updatedAt: date,
-            likes: 0,
-            likedBy: [],
-        },
-        owner: {
-            id: uid,
-            ref: userDocRef,
-        },
+    const data = {
+        "build": build,
     }
 
-    const buildDocRef = await runTransaction(db, async (transaction: any) => {
-        const counterDocRef = doc(db, 'counters', 'buildCounter');
-        const counterDoc = await transaction.get(counterDocRef);
+    const functions = getFunctions();
+    const addBuildOrder = httpsCallable(functions, 'addBuildOrder');
 
-        let buildId = 0;
-        if (counterDoc.exists()) {
-            buildId = counterDoc.data().count + 1;
-            transaction.update(counterDocRef, { count: buildId });
-        } else {
-            buildId = 0; // Start from 0 if no counter exists
-            transaction.set(counterDocRef, { count: buildId });
+    let slug = ""
+    let id = ""
+
+    await addBuildOrder(data).then((res) => { 
+
+        if(res && res.data) {
+
+            const responseData = res.data as any;
+
+            console.log("Response Data: ", responseData)
+
+            slug = responseData.slug;
+            id = responseData.id;
+
+            Notify("Build added successfully")
         }
+    }).catch(() => {
+        Notify("Error processing request. Please try again later.");
+    })
 
-        const newBuildDocRef = doc(buildsCollectionRef, buildId.toString());
-        transaction.set(newBuildDocRef, { ...fullBuild, id: buildId });
-
-        return newBuildDocRef;
-    });
-
-
-    // Reference the user's document and "my-builds" subcollection
-    const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
-
-    // Add a reference to the build in the user's "my-builds" subcollection
-    await setDoc(doc(myBuildsCollectionRef, buildDocRef.id), {
-        buildId: buildDocRef.id,
-        ref: buildDocRef,
-        buildName, // Optional: Store additional build details if needed
-        slug,
-    });
-
-    const id = buildDocRef.id
-
-    return {slug, id};
+    return { slug, id };
 }
 
-export async function UpdateBuildInFirebase({build, user}: AddBuildProps) {
+export async function UpdateBuildInFirebase({build}: AddBuildProps) {
     
-    const { buildName, id } = build
-    const { slug } = build.data
-    
-    const buildDocRef = doc(db, 'builds', String(id));
-    await updateDoc(buildDocRef, build);
+    const data = {
+        "build": build,
+    }
 
-    const userDocRef = doc(db, 'users', user.uid);
-    const myBuildsCollectionRef = collection(userDocRef, 'my-builds');
+    const functions = getFunctions();
+    const updateBuildOrder = httpsCallable(functions, 'updateBuildOrder');
 
-    // Add a reference to the build in the user's "my-builds" subcollection
-    await updateDoc(doc(myBuildsCollectionRef, buildDocRef.id), {
-        buildId: buildDocRef.id,
-        ref: buildDocRef,
-        buildName, // Optional: Store additional build details if needed
-        slug,
-    });
+    let slug = ""
+    let id = ""
 
-    
+    await updateBuildOrder(data).then((res) => {
+
+        console.log(res)
+
+        if(res && res.data) {
+
+            const responseData = res.data as any;
+
+            slug = responseData.slug;
+            id = responseData.id;
+
+            Notify("Build updated successfully")
+        }
+
+    }).catch(() => {
+        Notify("Error updating build order. Please try again later.")
+    })
+
+    return { slug, id }
 }
 
 export async function CheckForDuplicateUserName() {
@@ -234,4 +208,4 @@ export async function reportContentToFirebase(slug: string, buildId: string, use
     } catch (error) {
       Notify('Problem submitting report, please try again.')
     }
-  }
+}
