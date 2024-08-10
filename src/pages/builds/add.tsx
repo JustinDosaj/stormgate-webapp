@@ -108,7 +108,6 @@ export default function AddBuild() {
 
       const routerPath = await AddBuildToFirebase({ build, user });
     
-      
       router.push(`/builds/${routerPath.id}/${routerPath.slug}`)
       // Reset form
       setBuildName('');
