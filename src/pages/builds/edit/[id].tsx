@@ -4,7 +4,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Container } from '@/components/shared/container';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import AddBuildInfo from '@/components/ui/add-build/info';
-import { collection } from 'firebase/firestore';
 import {
   KeyboardSensor,
   PointerSensor,
@@ -18,7 +17,6 @@ import {
 import { useRouter } from 'next/router';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { generateSlug } from '@/utils/generateSlug';
 import SubmitButtons from '@/components/ui/add-build/submit';
 import { Notify } from '@/components/shared/notify';
 import Steps from '@/components/ui/add-build/steps';
@@ -122,12 +120,11 @@ export default function EditBuild() {
     }
 
     try {
+        const build = { id, buildName, info, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps, data: { createdAt, updatedAt } };
+        //const temp = await UpdateBuildInFirebase({build, user})
+        const res = await UpdateBuildInFirebase({build, user});
 
-        const slug = await generateSlug(buildName || '');
-        const build = { id, buildName, info, gameMode, faction, enemyFaction, youtubeLink, twitchLink, description, steps, data: { slug, createdAt, updatedAt } };
-        const temp = await UpdateBuildInFirebase({build, user})
-
-        router.push(`/builds/${id}/${slug}`); // Redirect to the updated build page
+        router.push(`/builds/${res.id}/${res.slug}`); // Redirect to the updated build page
 
     } catch (error) {
       console.error('Error updating build:', error);
