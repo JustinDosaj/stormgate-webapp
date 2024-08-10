@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "default": "stormgate-tactics-test-env",
+    "production": "stormgate-tactics",
+    "test": "stormgate-tactics-test-env"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
