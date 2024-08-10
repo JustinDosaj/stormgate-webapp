@@ -84,7 +84,9 @@ export default function Navbar() {
             ))}
             {/* Mobile User Profile Section */}
             <li className="flex items-center space-x-2 mt-4">
-              <UserCircleIcon className="h-8 w-8 text-gray-300" />
+              <Link href="/profile">
+                <UserCircleIcon className="h-7 w-7 text-gray-300 hover:text-gray-500" />
+              </Link>
               {user ? (
                 <>
                   <span>{username}</span>
