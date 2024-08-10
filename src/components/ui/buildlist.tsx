@@ -275,7 +275,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId, className }) => {
               <Link
                 href={`/builds/${build.id}/${build.slug}`}
                 key={build.id}
-                className="grid grid-cols-4 lg:grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center rounded-md hover:bg-gray-900 hover:cursor-pointer space-x-3"
+                className="grid grid-cols-4 lg:grid-cols-6 gap-4 border-b border-gray-700 p-4 items-center hover:bg-gray-900 hover:cursor-pointer space-x-3"
               >
                 {/* Title, Icon, and Author */}
                 <div className="col-span-2 flex items-center">
