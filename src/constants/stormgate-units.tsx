@@ -10,25 +10,16 @@ export const timingOptions = {
   vanguard: [
     { label: 'Time', value: 'time' },
     { label: 'Supply', value: 'supply' },
-    { label: 'Luminite', value: 'luminite' },
-    { label: 'Therium', value: 'therium' },
-    { label: 'Energy', value: 'energy' },
     { label: 'None', value: 'none' },
   ],
   celestials: [
     { label: 'Time', value: 'time' },
     { label: 'Supply', value: 'supply' },
-    { label: 'Luminite', value: 'luminite' },
-    { label: 'Therium', value: 'therium' },
-    { label: 'Power', value: 'power' },
     { label: 'None', value: 'none' },
   ],
   infernals: [
     { label: 'Time', value: 'time' },
     { label: 'Supply', value: 'supply' },
-    { label: 'Luminite', value: 'luminite' },
-    { label: 'Therium', value: 'therium' },
-    { label: 'Animus', value: 'energy' },
     { label: 'None', value: 'none' },
   ],
 }
