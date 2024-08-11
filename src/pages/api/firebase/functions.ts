@@ -143,27 +143,43 @@ export async function GetAuthor(userId: string) {
 
 interface LikesProps {
     buildId: string;
-    user: User;
     likes: number | 0;
     remove?: boolean;
 }
 
-export async function UpdateLikesInFirebase({buildId, user, remove}: LikesProps) {
+export async function UpdateLikesInFirebase({buildId, remove}: LikesProps) {
 
-    const buildDocRef = doc(db, 'builds', buildId);
-    
-    if(remove == true) {
-        await updateDoc(buildDocRef, {
-            "data.likes": increment(-1),
-            "data.likedBy": arrayRemove(user.uid),
-        });
-        return;
-    } else {
-        await updateDoc(buildDocRef, {
-            "data.likes": increment(1),
-            "data.likedBy": arrayUnion(user.uid),
-        });
+
+    const data = {
+        "buildId": buildId,
+        "remove": remove,
     }
+
+    const functions = getFunctions();
+    const likeBuildOrder = httpsCallable(functions, 'likeBuildOrder');
+
+    let slug = ""
+    let id = ""
+    let success = false;
+
+    await likeBuildOrder(data).then((res) => {
+
+        if(res && res.data) {
+
+            const responseData = res.data as any;
+
+            slug = responseData.slug;
+            id = responseData.id;
+
+            Notify("Build liked successfully")
+        }
+
+    }).catch(() => {
+        Notify("Error updating build order. Please try again later.")
+    })
+
+    return { success }
+
 }
 
 interface DeleteBuildProps {
