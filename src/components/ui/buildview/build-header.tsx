@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
 import { classNames } from "@/components/shared/classNames";
 import { useModal } from "@/context/ModalContext";
+import { Title } from "@/components/shared/title";
 
 interface BuildHeaderProps {
   buildName: string;
@@ -35,7 +36,7 @@ const BuildHeader: React.FC<BuildHeaderProps> = ({
   return (
     <div className="lg:flex items-center justify-between mb-3 space-y-4 lg:space-y-0">
       <div className="inline-flex items-center gap-4">
-        <h1 className="text-3xl font-bold">{buildName}</h1>
+        <Title className="text-3xl font-bold">{buildName}</Title>
       </div>
       <div className="flex justify-start space-x-4">
         {isOwner && (

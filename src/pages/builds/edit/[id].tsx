@@ -23,6 +23,7 @@ import Steps from '@/components/ui/add-build/steps';
 import { BuildStep } from '@/constants/interfaces';
 import { UpdateBuildInFirebase } from '@/pages/api/firebase/functions';
 import Head from 'next/head';
+import { Title } from '@/components/shared/title';
 
 export default function EditBuild() {
 
@@ -194,9 +195,9 @@ export default function EditBuild() {
         <title>Stormgate Tactics | Edit Build</title>
         <meta name='robots' content='noindex' />
       </Head>
-      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center p-24 text-white">
+      <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center py-24 text-white">
         <Container className="w-full max-w-4xl">
-          <h1 className="text-3xl font-bold mb-8 text-white">Edit Build</h1>
+          <Title className="mb-8">Edit Build</Title>
           <div className="flex flex-col space-y-6">
             {/* Left Side: Build Information */}
             
