@@ -89,14 +89,14 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
     }
 
     if (hasLiked) {
-      await UpdateLikesInFirebase({ likes, buildId: id, user, remove: true });
+      await UpdateLikesInFirebase({ likes, buildId: id, remove: true });
       setLikes(likes - 1);
       setHasLiked(false);
       return;
     }
 
     try {
-      await UpdateLikesInFirebase({ likes, buildId: id, user });
+      await UpdateLikesInFirebase({ likes, buildId: id });
       setLikes(likes + 1);
       setHasLiked(true);
     } catch (error) {
