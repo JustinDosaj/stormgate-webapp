@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "../shared/button";
-import { BellIcon, HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { Container } from "../shared/container";
 import algoliasearch, { SearchIndex } from "algoliasearch/lite";
 import { Build } from "@/constants/interfaces";
 import { useRouter } from "next/router";
 import { GetAuthor } from "@/pages/api/firebase/functions";
+import { Title } from "../shared/title";
 import SkeletonLoader from "./skeletonloader";
 
 // Algolia configuration
@@ -144,7 +145,7 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId, className }) => {
       <div className="container mx-auto">
         {/* Title and Create Button */}
         <div className="flex flex-col lg:flex-row items-center justify-between mb-6 space-y-4 lg:space-y-0">
-          <h2 className="text-center lg:text-left text-3xl lg:text-4xl font-semibold text-white">{title}</h2>
+          <Title>{title}</Title>
           <Button
             buttonType="button"
             text="Create Build Order"

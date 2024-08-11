@@ -5,7 +5,7 @@ interface TextProps {
 
 export function Title({children, className}: TextProps) {
     return(
-        <h1 className={`text-heading-1 font-semibold text-4xl lg:text-5xl ${className}`}>
+        <h1 className={`text-center lg:text-left text-3xl lg:text-4xl font-semibold text-white ${className}`}>
             {children}
         </h1>
     )

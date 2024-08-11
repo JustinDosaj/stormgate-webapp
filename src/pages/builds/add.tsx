@@ -20,6 +20,7 @@ import SubmitButtons from '@/components/ui/add-build/submit';
 import { Notify } from '@/components/shared/notify';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { Title } from '@/components/shared/title';
 
 
 export interface BuildStep {
@@ -189,7 +190,7 @@ export default function AddBuild() {
       </Head>
       <main className="bg-gray-900 flex min-h-screen flex-col items-center justify-center py-24 text-white">
         <Container className="w-full max-w-4xl">
-          <h1 className="text-3xl font-bold mb-8 text-white">Add New Build</h1>
+          <Title className="mb-8">Add New Build</Title>
           <div className="flex flex-col space-y-6 ">
             {/* Left Side: Build Information */}
             <AddBuildInfo

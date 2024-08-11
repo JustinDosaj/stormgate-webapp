@@ -51,7 +51,7 @@ const navigation = {
             </div>
       
           <p className="text-center text-xs leading-5 text-gray-500">
-            &copy; {year} Vurge LLC, Inc. All rights reserved. Game content and assets are trademarks of Frost Giant Studios.
+            &copy; {year} Stormgate Tactics, Inc. All rights reserved. Game content and assets are trademarks of Frost Giant Studios.
           </p>
         </div>
       </footer>

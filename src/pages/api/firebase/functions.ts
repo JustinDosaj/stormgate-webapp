@@ -142,15 +142,15 @@ export async function GetAuthor(userId: string) {
 }
 
 interface LikesProps {
-    id: string;
+    buildId: string;
     user: User;
     likes: number | 0;
     remove?: boolean;
 }
 
-export async function UpdateLikesInFirebase({likes, id, user, remove}: LikesProps) {
+export async function UpdateLikesInFirebase({buildId, user, remove}: LikesProps) {
 
-    const buildDocRef = doc(db, 'builds', id);
+    const buildDocRef = doc(db, 'builds', buildId);
     
     if(remove == true) {
         await updateDoc(buildDocRef, {
