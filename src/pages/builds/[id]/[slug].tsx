@@ -89,14 +89,14 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
     }
 
     if (hasLiked) {
-      await UpdateLikesInFirebase({ likes, id, user, remove: true });
+      await UpdateLikesInFirebase({ likes, buildId: id, user, remove: true });
       setLikes(likes - 1);
       setHasLiked(false);
       return;
     }
 
     try {
-      await UpdateLikesInFirebase({ likes, id, user });
+      await UpdateLikesInFirebase({ likes, buildId: id, user });
       setLikes(likes + 1);
       setHasLiked(true);
     } catch (error) {
@@ -205,12 +205,12 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
         />
       </Head>
       <main
-        className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between space-y-12 py-24 ${inter.className}`}
+        className={`bg-gray-900 flex min-h-screen flex-col items-center justify-between py-24 ${inter.className}`}
       >
         <div className="w-full flex justify-center">
           <StickyAd adSlot="123456789" />
           <div className="max-w-5xl flex-grow 2xl:mx-28">
-            <Container className="p-6 max-w-4xl mx-auto bg-gray-900 text-white rounded-lg shadow-lg">
+            <Container className="max-w-4xl mx-auto bg-gray-900 text-white rounded-lg shadow-lg">
               <BuildHeader
                 buildName={buildName}
                 isOwner={isOwner}
