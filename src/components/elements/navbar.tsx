@@ -1,36 +1,37 @@
-// components/Navbar.tsx
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { UserCircleIcon, XMarkIcon, Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/solid';
+import { UserCircleIcon, XMarkIcon, Bars3Icon } from '@heroicons/react/24/solid';
 import { useAuth } from '@/context/AuthContext';
-import Image from 'next/image';
 
 const navItems = [
   { href: '/', label: 'Home' },
   { href: '/explore', label: 'Explore' },
-  { href: '/builds', label: 'Builds'},
+  { href: '/builds', label: 'Builds' },
 ];
 
 export default function Navbar() {
   const { user, username } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <Link href="/">
-          <div className="flex items-center space-x-2">
-            <img src="/images/logos/sg-logo-250x50.png" alt="Stormgate Tactics Logo" className="h-10 w-auto" />
-          </div>
-        </Link>
-
+        <div className="w-full md:w-1/3 flex justify-start">
+          <Link href="/">
+            <div className="flex items-center space-x-2">
+              <img src="/images/logos/sg-logo-250x50.png" alt="Stormgate Tactics Logo" className="h-10 w-auto" />
+            </div>
+          </Link>
+        </div>
         {/* Desktop Navigation Links Centered */}
-        <ul className="hidden md:flex space-x-12 justify-center absolute left-1/2 transform -translate-x-1/2">
+        <ul className="hidden md:flex space-x-12 justify-center md:w-1/3">
           {navItems.map((item) => (
             <li
               key={item.href}
-              className={ ''}
+              className={router.pathname === item.href ? 'text-violet-00 underline' : ''}
             >
               <Link href={item.href} className={`hover:text-gray-400`}>
                 {item.label}
@@ -40,7 +41,7 @@ export default function Navbar() {
         </ul>
 
         {/* Desktop User Profile Section */}
-        <div className="items-center hidden md:flex space-x-1">
+        <div className="items-center hidden md:flex space-x-1 md:w-1/3 justify-end">
           {user ? (
             <span>{username}</span>
           ) : (
@@ -51,12 +52,11 @@ export default function Navbar() {
               </Link>
             </>
           )}
-          { user && (
+          {user && (
             <Link href="/profile">
               <UserCircleIcon className="h-7 w-7 text-gray-300 hover:text-gray-500" />
             </Link>
-            )
-          }
+          )}
         </div>
 
         {/* Mobile Hamburger Menu */}
@@ -76,10 +76,13 @@ export default function Navbar() {
           <ul className="space-y-4">
             {navItems.map((item) => (
               <li key={item.href} className="flex flex-col">
-                  <Link href={item.href} className="hover:text-gray-400" onClick={() => setIsMenuOpen(false)}>
-                    {item.label}
-                  </Link>
-                
+                <Link
+                  href={item.href}
+                  className={router.pathname === item.href ? 'text-violet-700 underline' : 'hover:text-gray-400'}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
               </li>
             ))}
             {/* Mobile User Profile Section */}
@@ -88,9 +91,7 @@ export default function Navbar() {
                 <UserCircleIcon className="h-7 w-7 text-gray-300 hover:text-gray-500" />
               </Link>
               {user ? (
-                <>
-                  <span>{username}</span>
-                </>
+                <span>{username}</span>
               ) : (
                 <>
                   <span>Not logged in</span>
