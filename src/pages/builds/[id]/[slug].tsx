@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import { doc, getDoc } from "firebase/firestore";
-import { useRouter } from "next/router";
 import { db } from "@/lib/firebase";
 import { Container } from "@/components/shared/container";
 import { useAuth } from "@/context/AuthContext";
@@ -89,16 +88,16 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
     }
 
     if (hasLiked) {
-      await UpdateLikesInFirebase({ likes, buildId: id, remove: true });
       setLikes(likes - 1);
       setHasLiked(false);
+      await UpdateLikesInFirebase({ likes, buildId: id, remove: true });
       return;
     }
 
     try {
-      await UpdateLikesInFirebase({ likes, buildId: id });
       setLikes(likes + 1);
       setHasLiked(true);
+      await UpdateLikesInFirebase({ likes, buildId: id });
     } catch (error) {
       console.error("Error liking the build:", error);
     }
