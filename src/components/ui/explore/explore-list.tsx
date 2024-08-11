@@ -2,6 +2,7 @@ import { PostCard } from "./card"
 import { Container } from "@/components/shared/container"
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { Title } from "@/components/shared/title";
 
 export function ExploreList({blogContent}: any) {
 
@@ -15,7 +16,7 @@ export function ExploreList({blogContent}: any) {
     
     return (
         <Container className="container mx-auto">
-            <h1 className="text-center lg:text-left text-3xl lg:text-4xl font-semibold text-white mb-8">News, Guides & More</h1>
+            <Title className="mb-8">News, Guides & More</Title>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedBlogContent.map((post: any) => (
                 <PostCard key={post.slug} post={post}/>
