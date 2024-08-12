@@ -158,11 +158,10 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
     description: `${description}`,
     text: `${formattedSteps}`,
     datePublished: `${data.createdAt}`,
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: `${likes || 1}`,
-      bestRating: "1",
-      ratingCount: `${likes || 1}`,
+    interactionStatistic: {
+      "@type": "InteractionCounter",
+      interactionType: "https://schema.org/LikeAction",
+      userInteractionCount: `${likes || 0}`
     },
     author: {
       "@type": "Person",
