@@ -197,8 +197,8 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
         <meta property="og:url" content={ogUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Stormgate Tactics" />
-        <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/stormgate-tactics.appspot.com/o/sg-logo-250x250.png?alt=media&token=5463c788-6e75-476f-99bd-7e14146b2945"/>
-        <meta property="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/stormgate-tactics.appspot.com/o/sg-logo-250x250.png?alt=media&token=5463c788-6e75-476f-99bd-7e14146b2945"/>
+        <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/stormgate-tactics.appspot.com/o/1200x600-logo.png?alt=media&token=cdd94ac1-7490-4054-982e-a4f2ade781a7"/>
+        <meta property="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/stormgate-tactics.appspot.com/o/1200x600-logo.png?alt=media&token=cdd94ac1-7490-4054-982e-a4f2ade781a7"/>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
