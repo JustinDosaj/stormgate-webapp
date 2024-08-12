@@ -160,9 +160,9 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
     datePublished: `${data.createdAt}`,
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: `${likes}`,
+      ratingValue: `${likes || 0}`,
       bestRating: "1",
-      ratingCount: `${likes}`,
+      ratingCount: `${likes || 0}`,
     },
     author: {
       "@type": "Person",
