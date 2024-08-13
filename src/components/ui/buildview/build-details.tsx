@@ -85,7 +85,7 @@ interface BuildDetailsProps {
         </div>
         {info && (
           <div className="mb-8 text-sm lg:text-base text-gray-100">
-            <p className="font-semibold">Notes:</p>
+            <p className="font-semibold">Transition:</p>
             <p>{info}</p>
           </div>
         )}
