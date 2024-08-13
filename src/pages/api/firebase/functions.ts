@@ -171,11 +171,10 @@ export async function UpdateLikesInFirebase({buildId, remove}: LikesProps) {
             slug = responseData.slug;
             id = responseData.id;
 
-            Notify("Build liked successfully")
         }
 
     }).catch(() => {
-        Notify("Error updating build order. Please try again later.")
+        
     })
 
     return { success }
