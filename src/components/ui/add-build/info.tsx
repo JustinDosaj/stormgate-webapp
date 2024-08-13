@@ -112,7 +112,7 @@ export default function AddBuildInfo({
                 />
               </div>
               <div>
-                <label htmlFor="additionalInfo" className="block font-semibold mb-2">Additional Information:</label>
+                <label htmlFor="additionalInfo" className="block font-semibold mb-2">Transition:</label>
                 <textarea
                   id="additionalInfo"
                   className="w-full p-2 bg-gray-700 text-white rounded-md"

@@ -15,6 +15,7 @@ interface BuildHeaderProps {
   slug: string;
   likes: number;
   hasLiked: boolean;
+  likesDisabled: boolean;
   handleLike: () => void;
   handleReport: () => void;
   openModal: any;
@@ -27,6 +28,7 @@ const BuildHeader: React.FC<BuildHeaderProps> = ({
   slug,
   likes,
   hasLiked,
+  likesDisabled,
   handleLike,
   handleReport,
 }) => {
@@ -69,6 +71,7 @@ const BuildHeader: React.FC<BuildHeaderProps> = ({
         <div className="flex items-center justify-center">
           <button
             onClick={handleLike}
+            disabled={likesDisabled}
             className={classNames(
               hasLiked
                 ? "bg-violet-700 hover:bg-violet-900 text-white"
