@@ -67,6 +67,7 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [likes, setLikes] = useState<number>(build?.data.likes || 0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
+  const [likesDisabled, setLikesDisabled] = useState<boolean>(false);
 
   useEffect(() => {
     if (user?.uid === build.owner.id) setIsOwner(true);
@@ -87,17 +88,19 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
       return;
     }
 
+    setLikesDisabled(true);
+
     if (hasLiked) {
       setLikes(likes - 1);
       setHasLiked(false);
-      await UpdateLikesInFirebase({ likes, buildId: id, remove: true });
+      await UpdateLikesInFirebase({ likes, buildId: id, remove: true }).then(() => {setLikesDisabled(false)});
       return;
     }
 
     try {
       setLikes(likes + 1);
       setHasLiked(true);
-      await UpdateLikesInFirebase({ likes, buildId: id });
+      await UpdateLikesInFirebase({ likes, buildId: id }).then(() => {setLikesDisabled(false)});
     } catch (error) {
       console.error("Error liking the build:", error);
     }
@@ -218,6 +221,7 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
                 slug={slug}
                 likes={likes}
                 hasLiked={hasLiked}
+                likesDisabled={likesDisabled}
                 handleLike={handleLike}
                 handleReport={handleReport}
                 openModal={openModal}
