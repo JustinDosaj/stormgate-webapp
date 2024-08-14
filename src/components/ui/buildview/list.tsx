@@ -1,7 +1,7 @@
 export function BuildViewList({build}: any) {
     return(
         <>
-            <h2 className="text-2xl font-semibold mb-4">Build Order Steps</h2>
+            <h2 className="text-2xl font-semibold mt-8 mb-4">Build Order Steps</h2>
             <div className="grid grid-cols-3 lg:grid-cols-12 gap-4 bg-gray-700 p-4 font-semibold text-gray-200 border-b border-gray-400 rounded-t-md text-sm lg:text-base">
                 <div className="lg:col-span-2 flex">Timing</div>
                 <div className="lg:col-span-3 hidden lg:block">Unit/Structure/Action</div>
