@@ -28,9 +28,7 @@ interface BuildDetailsProps {
   }) => {
     return (
         <>
-        <div className="border-b border-gray-700 mt-4"></div>
-        <h2 className="text-2xl font-semibold mt-4 mb-4">Build Details</h2>
-        <div className="border border-gray-700 rounded-md p-4 bg-gray-800">
+        <div className="border border-gray-700 rounded-md mt-8 p-4 bg-gray-800">
           <div className="flex justify-between mb-4 text-sm lg:text-base text-gray-100 border-b border-gray-700">
      
                 <span className="">
