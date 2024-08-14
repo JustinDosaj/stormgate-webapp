@@ -175,10 +175,10 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
   return (
     <>
       <Head>
-        <title>{`Stormgate Tactics | ${buildName}`}</title>
+        <title>{`${buildName} | Stormgate Build Guide`}</title>
         <meta
           name="title"
-          content={`Stormgate Tactics | ${buildName}`}
+          content={`${buildName} | Stormgate Build Guide`}
         />
         <meta
           name="description"
@@ -188,7 +188,7 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
               : `Stormgate build order for ${faction} versus ${enemyFaction}`
           }`}
         />
-        <meta property="og:title" content={`Stormgate Tactics | ${buildName}`} />
+        <meta property="og:title" content={`${buildName} | Stormgate Build Guide`} />
         <meta
           property="og:description"
           content={`${
@@ -199,7 +199,7 @@ const Build: React.FC<{ build: any; id: string; slug: string; username: string; 
         />
         <meta property="og:url" content={ogUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Stormgate Tactics" />
+        <meta property="og:site_name" content="Stormgate Tactics"/>
         <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/stormgate-tactics.appspot.com/o/1200x600-logo.png?alt=media&token=cdd94ac1-7490-4054-982e-a4f2ade781a7"/>
         <meta property="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/stormgate-tactics.appspot.com/o/1200x600-logo.png?alt=media&token=cdd94ac1-7490-4054-982e-a4f2ade781a7"/>
         <script
