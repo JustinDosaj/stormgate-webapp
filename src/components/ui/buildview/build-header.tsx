@@ -36,11 +36,11 @@ const BuildHeader: React.FC<BuildHeaderProps> = ({
   const { openModal } = useModal();
 
   return (
-    <div className="lg:flex items-center justify-between mb-3 space-y-4 lg:space-y-0">
+    <div className="md:flex items-center justify-between mb-3 space-y-4 lg:space-y-0">
       <div className="inline-flex items-center gap-4">
         <Title className="text-3xl font-bold">{buildName}</Title>
       </div>
-      <div className="flex justify-start space-x-4">
+      <div className="flex justify-center space-x-4">
         {isOwner && (
           <>
             <Button
