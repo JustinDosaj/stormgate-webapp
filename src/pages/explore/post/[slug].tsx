@@ -7,7 +7,6 @@ import { getEntriesForContentTypes } from "@/lib/contentful";
 import { RecentPostCard } from "@/components/ui/explore/recentPostCard";
 import Head from "next/head";
 import { StickyAd } from "@/components/ads/sticky";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import React from "react";
 import { extractTextFromRichText } from "@/components/ui/explore/render";
 import AdSense from "@/components/ads/adsense";
