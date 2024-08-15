@@ -19,7 +19,7 @@ export const renderOptions = {
 export const renderContentBlock = (block: any) => {
     switch (block.fields.blockType) {
       case 'text':
-        return <div className="text-white prose-base">{documentToReactComponents(block.fields.textContent)}</div>;
+        return <div className="text-white prose-base prose-ul:list-disc">{documentToReactComponents(block.fields.textContent)}</div>;
       case 'image':
         const imageUrl = block.fields.image.fields.file.url;
         const finalImageUrl = imageUrl.startsWith('//') ? `https:${imageUrl}` : imageUrl;
