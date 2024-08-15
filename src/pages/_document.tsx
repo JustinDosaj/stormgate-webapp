@@ -6,6 +6,7 @@ export default function Document() {
       <Head>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5837655994202747" crossOrigin="anonymous"></script>
         <meta property="og:site_name" content="Stormgatetactics.com"/>
+        <link rel="icon" href="/favicon.ico"/>
       </Head>
       <body>
         <Main />
