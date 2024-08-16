@@ -26,10 +26,10 @@ export function About() {
         <div className="w-full md:w-1/2 flex flex-col items-center md:items-start space-y-6">
           <Title className="text-center md:text-left">About Stormgate Tactics</Title>
           <Paragraph className=" text-center md:text-left max-w-3xl">
-            Welcome to Stormgate Tactics, your ultimate resource for everything Stormgate! Whether you're looking to master new strategies, discover optimized build orders, or stay updated with the latest news, our platform has you covered.
+            Welcome to Stormgate Tactics, your ultimate resource for everything Stormgate! Whether you are looking to master new strategies, discover optimized build orders, or stay updated with the latest news, our platform has you covered.
           </Paragraph>
           <Paragraph className="text-center md:text-left max-w-3xl">
-            Our web app offers a vast array of build orders tailored for various game modes and factions, helping you dominate your opponents in every match. Stay ahead of the curve with our guides and articles, where we break down complex strategies and offer insights into the game's ever-evolving meta.
+            Our web app offers a vast array of build orders tailored for various game modes and factions, helping you dominate your opponents in every match. Stay ahead of the curve with our guides and articles, where we break down complex strategies and offer insights into the ever-evolving meta.
           </Paragraph>
           <Link href="/builds">
             <Button buttonType="button" text="Discover Builds" size="medium"/>
