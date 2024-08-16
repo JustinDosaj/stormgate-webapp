@@ -33,38 +33,38 @@ interface BuildDetailsProps {
      
                 <span className="">
                   <span className="font-semibold">Description: </span>
-                  <Paragraph size="medium" className="mb-3">{description}</Paragraph>
+                  <Paragraph size="medium" className="mb-3 text-gray-100">{description}</Paragraph>
                 </span>
           
           </div>
-          <div className="flex justify-between mb-4 text-sm lg:text-base text-gray-100">
+          <Paragraph size="medium" className="flex justify-between mb-4 text-gray-100">
               <span className="">
-                <span className="font-semibold">Matchup: </span>
+                <span className="font-semibold text-white">Matchup: </span>
                 <span className="capitalize">{faction} </span>
                   v. 
                 <span className="capitalize"> {enemyFaction}</span>
               </span>
-          </div>
-          <div className="flex justify-between mb-4 text-sm lg:text-base text-gray-100">
+          </Paragraph>
+          <Paragraph size="medium" className="flex justify-between mb-4 text-sm lg:text-base text-gray-100">
             <span>
-              <span className="font-semibold">Game Mode: </span>
+              <span className="font-semibold text-white">Game Mode: </span>
               {gameMode}
             </span>
             <span>
-                <span className="font-semibold">Created: </span> 
-                {createdAt}
-              </span>
-          </div>
-          <div className="flex justify-between  text-sm lg:text-base text-gray-100">
+              <span className="font-semibold text-white">Created: </span> 
+              {createdAt}
+            </span>
+          </Paragraph>
+          <Paragraph size="medium" className="flex justify-between">
             <span>
-              <span className="font-semibold">Creator: </span>
+              <span className="font-semibold text-white">Creator: </span>
               {username}
             </span>
             <span>
-              <span className="font-semibold">Updated: </span> 
+              <span className="font-semibold text-white">Updated: </span> 
               {updatedAt}
             </span>
-          </div>
+          </Paragraph>
           <div className="mb-4 text-sm lg:text-base space-x-4 flex">
             {youtubeLink !== "" && (
             <a
@@ -90,10 +90,10 @@ interface BuildDetailsProps {
             )}
           </div>
           {info && (
-            <div className="text-sm lg:text-base text-gray-100 border-t border-gray-700">
-              <p className="font-semibold mt-4">Transition:</p>
+            <Paragraph size="medium" className="border-t border-gray-700">
+              <p className="font-semibold mt-4 text-white">Transition:</p>
               <p>{info}</p>
-            </div>
+            </Paragraph>
           )}
         </div>
       </>
