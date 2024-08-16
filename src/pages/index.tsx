@@ -4,6 +4,7 @@ import { Hero } from "@/components/ui/hero";
 import Head from "next/head";
 import BuildList from "@/components/ui/buildlist";
 import AdSense from "@/components/ads/adsense";
+import { About } from "@/components/ui/about";
 import { StickyAd } from "@/components/ads/sticky";
 import { GetServerSideProps } from "next";
 import { getEntriesForContentTypes } from "@/lib/contentful";
@@ -43,6 +44,7 @@ export default function Home({blogContent}: any) {
           <div className="max-w-5xl flex-grow 2xl:mx-28 space-y-16">
             <Hero />
             <BuildList title={"Build Orders"} />
+            <About/>
             <ExploreList blogContent={blogContent}/>
           </div>
           <StickyAd adSlot="123456789"/>

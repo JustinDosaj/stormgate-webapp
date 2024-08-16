@@ -1,3 +1,5 @@
+import { Paragraph } from "@/components/shared/paragraph"
+
 export function BuildViewList({build}: any) {
     return(
         <>
@@ -13,29 +15,29 @@ export function BuildViewList({build}: any) {
                 <div key={step.id} className="grid grid-cols-3 lg:grid-cols-12 gap-4 items-center p-4 border-b border-gray-700">
                     {/* Timing */}
                     <div className="lg:col-span-2 flex items-center space-x-2">
-                        <span className="font-mono text-sm lg:text-base text-gray-200">{step.timing.value}</span>
-                        <span className="text-xs lg:text-sm text-gray-400">{step.timing.type}</span>
+                        <Paragraph size="medium" className="font-mono text-sm lg:text-base text-white">{step.timing.value}</Paragraph>
+                        <Paragraph size="xsmall" className="text-gray-400">{step.timing.type}</Paragraph>
                     </div>
 
                     {/* Action */}
                     <div className="lg:col-span-3 flex-grow text-xs lg:text-sm">
                     {step.action.value ? (
-                        <div className="space-x-1.5 text-gray-200">
+                        <Paragraph size="small" className="space-x-1.5 text-white">
                             <span>{step.action.value}</span>
                             <span className="">{step.amount == 0 ? '' : `x${step.amount}`}</span>
-                        </div>
+                        </Paragraph>
                     ) : (
-                        <span className="text-gray-400 text-xs lg:text-sm">- - -</span>
+                        <Paragraph size="medium" className="text-gray-400">- - -</Paragraph>
                     )}
                     </div>
 
                         
                     {/* Description */}
-                    <div className="lg:col-span-7 text-xs lg:text-sm text-gray-200">
+                    <div className="lg:col-span-7">
                         {step.description ? (
-                        <span>{step.description}</span>
+                        <Paragraph size="small">{step.description}</Paragraph>
                         ) : (
-                        <span className="text-gray-400">- - -</span>
+                        <Paragraph size="medium" className="text-gray-400">- - -</Paragraph>
                         )}
                     </div>
 
