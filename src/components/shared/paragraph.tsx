@@ -13,7 +13,7 @@ export function Paragraph({className, children, size}: TextProps){
             size == 'xsmall' ? `text-xs` 
             : size == 'small' ? `text-xs lg:text-sm` 
             : size == 'medium' ? `text-sm lg:text-base` 
-            : `text-base lg:text-lg`, `text-gray-100 ${className}`
+            : `text-base lg:text-lg`, `text-gray-300 ${className}`
             )}>
             {children}
         </p>

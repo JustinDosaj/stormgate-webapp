@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { GetAuthor } from "@/pages/api/firebase/functions";
 import { Title } from "../shared/title";
 import SkeletonLoader from "./skeletonloader";
+import { Paragraph } from "../shared/paragraph";
 
 // Algolia configuration
 
@@ -282,9 +283,9 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId, className }) => {
                 <div className="col-span-2 flex items-center">
                   {/* Icon Placeholder */}
                   <div className="ml-1">
-                    <div className="text-sm lg:text-base font-semibold capitalize">
+                    <Paragraph size="medium" className="text-white font-semibold capitalize">
                       {build.title}
-                    </div>
+                    </Paragraph>
                     <div className="text-xs lg:text-sm text-gray-400">
                       by {build.author}
                     </div>
@@ -292,27 +293,28 @@ const BuildList: React.FC<BuildListProps> = ({ title, userId, className }) => {
                 </div>
 
                 {/* Faction */}
-                <div className="capitalize hidden lg:block text-sm lg:text-base">
+                <Paragraph size="medium" className="text-white capitalize hidden lg:block">
                   {build.faction}
-                </div>
+                </Paragraph>
 
                 {/* Opponent Faction */}
-                <div className="capitalize hidden lg:block text-sm lg:text-base">
+                <Paragraph size="medium" className="text-white capitalize hidden lg:block">
                   {build.enemyFaction}
-                </div>
-                
-                <div className="block lg:hidden capitalize text-sm lg:text-base">
+                </Paragraph>
+
+                {/* Matchup for mobile devices */}  
+                <Paragraph size="medium" className="text-white capitalize block lg:hidden">
                   {build.faction} vs {build.enemyFaction}
-                </div>
+                </Paragraph>
 
                 {/* Build Created */}
                 <div className="hidden lg:block">{build.dateCreated}</div>
 
                 {/* Rating */}
-                <div className="flex items-center text-sm lg:text-base">
+                <Paragraph size="medium" className="text-white flex items-center text-sm lg:text-base">
                   <HandThumbUpIcon className="h-3.5 w-3.5 lg:h-5 lg:w-5 text-green-500 mr-1.5" />
                   {build.likes}
-                </div>
+                </Paragraph>
               </Link>
             ))
           )}
