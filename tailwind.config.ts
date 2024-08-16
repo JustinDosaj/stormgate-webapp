@@ -23,3 +23,7 @@ const config: Config = {
   ],
 };
 export default config;
+
+
+// text-gray-300 on dark-bg
+// text-gray-100 on light-gray bg
