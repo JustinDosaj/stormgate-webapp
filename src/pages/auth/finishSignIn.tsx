@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Container } from "@/components/shared/container";
 import { Loader } from "@/components/shared/loader";
 
 export default function FinishSignIn() {

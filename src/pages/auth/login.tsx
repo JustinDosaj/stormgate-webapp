@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../lib/firebase";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
 import { Inter } from "next/font/google";
@@ -19,7 +17,6 @@ export default function Login() {
   const { redirect } = router.query;
 
   const handlePasswordlessLogin = async () => {
-
 
     setIsLoading(true);
     setError(null);
