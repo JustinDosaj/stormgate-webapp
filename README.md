@@ -1,5 +1,5 @@
 # Stormgate Web App
-This repository contains a [Next.js](https://nextjs.org/) web application that allows users to search and create build orders for [Stormgate](https://playstormgate.com/)
+This repository contains a [Next.js](https://nextjs.org/) web application called [Stormgate Tactics](https://www.stormgatetactics.com/) that allows users to search and create build orders for [Stormgate](https://playstormgate.com/).
 
 ### Features
 - **Search Builds**: Find build orders to try out in-game
